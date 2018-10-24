@@ -14,7 +14,7 @@ int compare(const void* a, const void* b) {
 }
 
 struct gameState* newGame() {
-  struct gameState* g = malloc(sizeof(struct gameState));
+  struct gameState* g = (struct gameState *) malloc(sizeof(struct gameState));
   return g;
 }
 

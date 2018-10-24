@@ -115,15 +115,13 @@
     <None Include="..\dominion\player.gcno">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\dominion\READM.md">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="..\dominion\rngs.gcda">
       <Filter>Source Files</Filter>
     </None>
     <None Include="..\dominion\rngs.gcno">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="Readme.MD" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\dominion\dominion.o">

@@ -190,9 +190,9 @@
     <None Include="..\dominion\playdom.gcno" />
     <None Include="..\dominion\player" />
     <None Include="..\dominion\player.gcno" />
-    <None Include="..\dominion\READM.md" />
     <None Include="..\dominion\rngs.gcda" />
     <None Include="..\dominion\rngs.gcno" />
+    <None Include="Readme.MD" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\dominion\dominion.o" />
