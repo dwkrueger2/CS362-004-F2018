@@ -14,5 +14,6 @@
 *.log
 *.pch
 /.vs/*
+*/Debug/*
 
 

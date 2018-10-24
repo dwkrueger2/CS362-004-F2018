@@ -1393,6 +1393,10 @@ int updateCoins(int player, struct gameState *state, int bonus)
 	return 0;
 }
 
+// testing a function for linking purposes
+int testFunction() {
+	return 555;
+}
 
 //end of dominion.c
 

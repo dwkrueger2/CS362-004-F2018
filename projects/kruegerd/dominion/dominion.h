@@ -149,4 +149,7 @@ int cardEffectGardens(int card, int choice1, int choice2, int choice3, struct ga
 int cardEffectVillage(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
 int cardEffectCutPurse(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+
+// Testing a function for linking purposes
+int testFunction(); 
 #endif
