@@ -1,0 +1,1 @@
+CLASS_INFO contains files that are instructional in nature. Some of them might contain Course Supplied Material
