@@ -69,13 +69,13 @@ struct gameState {
   int outpostPlayed;
   int outpostTurn;
   int whoseTurn;
-  int phase;
+  int phase; // Action, Buy, Cleanup
   int numActions; /* Starts at 1 each turn */
   int coins; /* Use as you see fit! */
   int numBuys; /* Starts at 1 each turn */
   int hand[MAX_PLAYERS][MAX_HAND];
   int handCount[MAX_PLAYERS];
-  int deck[MAX_PLAYERS][MAX_DECK];
+  int deck[MAX_PLAYERS][MAX_DECK];  // The deck is the players draw pile.  It is shuffled and the player draws from this.  deck[Player1][position 1...n]  n = number cards in player 1's deck
   int deckCount[MAX_PLAYERS]; // the number of cards in a player's personal deck
   int discard[MAX_PLAYERS][MAX_DECK];
   int discardCount[MAX_PLAYERS];

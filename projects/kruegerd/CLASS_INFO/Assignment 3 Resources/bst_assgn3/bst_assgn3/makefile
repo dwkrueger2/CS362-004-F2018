@@ -30,6 +30,8 @@ tests.out: unittest1.c unittest2.c unittest3.c unittest4.c unittest5.c bst.c com
 	./unittest5 >> tests.out
 	gcov bst.c >> tests.out
 
+ 
+
 clean:
 	rm tests.out
 

@@ -2,3 +2,4 @@
 # ** prepended will find any directories with obj anywhere in the repo (downstream) and ignore
 
 **/obj
+**/Debug

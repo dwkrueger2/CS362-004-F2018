@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Dominion-Linux\example-cardtest4.c" />
     <ClCompile Include="kruegerd-dominion-windows-console.cpp" />
   </ItemGroup>
   <ItemGroup>
