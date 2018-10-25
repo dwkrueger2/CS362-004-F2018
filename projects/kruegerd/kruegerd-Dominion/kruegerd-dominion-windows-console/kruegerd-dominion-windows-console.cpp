@@ -20,10 +20,12 @@
 #elif __linux__
 #include <ctime>
 #endif // (_WIN32)
-
+//extern "C++"
+{
 #include "../../dominion/dominion_helpers.h"
 #include "../../dominion/dominion.h"
 #include "../../dominion/rngs.h"
+}
 
 
 

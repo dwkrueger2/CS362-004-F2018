@@ -1,14 +1,18 @@
 #CFLAGS= -Wall -fpic -coverage -lm -std=c99
-CFLAGS= -Wall -fpic -coverage -lm -std=c++11
-
+#CFLAGS= -Wall -fpic -coverage -lm -std=c++11
+CFLAGS= -Wall -std=c++11
 rngs.o: ../../dominion/rngs.h ../../dominion/rngs.c
-	gcc -c ../../dominion/rngs.c -g  $(CFLAGS)
+	gcc -c -x c++ -o ../../dominion/rngs.o ../../dominion/rngs.c -g  $(CFLAGS)
+#	 gcc -c -x c++ ../../dominion/rngs.c -g -Wall -fpic -coverage -lm -std=c++11
 
 dominion.o: ../../dominion/dominion.h ../../dominion/dominion.c ../../dominion/rngs.o
-	gcc -c ../../dominion/dominion.c -g  $(CFLAGS)
+	gcc -c -x c++ ../../dominion/dominion.c -g  $(CFLAGS)
+#gcc -c -x c++ ../../dominion/dominion.c -g -Wall -fpic -coverage -lm -std=c++11
 
 playdom: ../../dominion/dominion.o ../../dominion/playdom.c
-	gcc -o ../../dominion/playdom ../../dominion/playdom.c -g ../../dominion/dominion.o ../../dominion/rngs.o $(CFLAGS)
+	gcc -x c++ -o dominion/playdom ../../dominion/playdom.c -g ../../dominion/dominion.o ../../dominion/rngs.o $(CFLAGS)
+#gcc -x c++ -o dominion/playdom ../../dominion/playdom.c -g dominion.o rngs.o -g -Wall -fpic -coverage -lm -std=c++11
+
 
 winConsole: ../../dominion/dominion.o ../../dominion/playdom.c kruegerd-dominion-windows-console.cpp
 	gcc -o winC kruegerd-dominion-windows-console.cpp  -g ../../dominion/dominion.o ../../dominion/rngs.o $(CFLAGS)

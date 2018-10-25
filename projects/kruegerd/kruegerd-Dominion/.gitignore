@@ -1,0 +1,4 @@
+# https://www.atlassian.com/git/tutorials/saving-changes/gitignore#git-ignore-patterns
+# ** prepended will find any directories with obj anywhere in the repo (downstream) and ignore
+
+**/obj
