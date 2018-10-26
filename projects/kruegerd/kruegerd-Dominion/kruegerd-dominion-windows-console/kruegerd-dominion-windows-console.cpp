@@ -107,10 +107,27 @@ string getDeckString(int player_i, gameState * state)
 	ss << " }";
 	return ss.str();
 }
+// a member by member (byte by byte) comparison of items in the gamestate
+bool isGameStateEqual(gameState * G1, gameState * G2) {
+
+	bool isSame = true;
+	for (int offset = 0; offset < (sizeof(gameState) / sizeof(int)) && isSame; offset++)
+	{
+		int a = *(((int*)G1)+offset);
+		int b = *(((int*)G2) + offset);
+
+		isSame = isSame && (a == b);
+
+		//isSame = isSame && (*(((int *)G1) + offset)) == *((int *)(G2 + offset))); // basically looking at every int size memory piece and seeing if the stuff at that location is identical
+		// structures are concurrently ordered in memory so this should work.
+	}
+	//G2->playedCardCount++;
+	return isSame;
+}
 /// Stubs - Overall Project Requirements///
 /// Plan to move to their own files later
-int unittest1_c();
-int unittest2_c();
+int unittest1_c(); // Shuffle
+int unittest2_c(); // Buy Card
 int unittest3_c();
 int unittest4_c();
 int cardtest1_c();
@@ -149,6 +166,9 @@ int main(int argc, char ** argv)
 		//cout << "---Results:  " << outValue << " ---\n";
 		
 		unittest1_c();
+		cout << "|________________________________________________________________|" << endl;
+		unittest2_c();
+		cout << "|________________________________________________________________|" << endl;
 
 		cout << "[Press Enter to Exit]";
 		cin.get();
@@ -316,27 +336,6 @@ int playdom_c_main(int argc, const char** argv)
 //					before shuffled deckCount[player[i] = 0
 //			Therefore deckCount[player[i]]	 
 
-// gameState Structure
-//struct gameState {
-//int numPlayers; //number of players
-//int supplyCount[treasure_map + 1];  //this is the amount of a specific type of card given a specific number.
-//int embargoTokens[treasure_map + 1]; // interesting uses the last enumeration item as an index value.
-//int outpostPlayed;
-//int outpostTurn;
-//int whoseTurn;
-//int phase; // Action, Buy, Cleanup
-//int numActions; /* Starts at 1 each turn */
-//int coins; /* Use as you see fit! */
-//int numBuys; /* Starts at 1 each turn */
-//int hand[MAX_PLAYERS][MAX_HAND];
-//int handCount[MAX_PLAYERS];
-//int deck[MAX_PLAYERS][MAX_DECK]; //// The deck is the players draw pile.  It is shuffled and the player draws from this.  deck[Player1][position 1...n]  n = number cards in player 1's deck
-//int deckCount[MAX_PLAYERS]; // the number of cards in a player's personal deck
-//int discard[MAX_PLAYERS][MAX_DECK];
-//int discardCount[MAX_PLAYERS];
-//int playedCards[MAX_DECK]; // the cards played in the played area
-//int playedCardCount;
-//};
 int unittest1_c() {
 	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
 	struct gameState G;
@@ -374,6 +373,7 @@ int unittest1_c() {
 		deckCopy[i] = G.deck[player_i][i]; // coppies the current player's deck to deckCopy
 	for (int j = 0; j < 50; j++) // with only 5 cards in the deck the probility of randomizing the deck returning the same deck is 50*(1:120)
 	{
+		Counter++;
 		
 		noError = noError && (shuffle(player_i, &G) == 0);
 		if (j < 5) // print the first 5 shuffles
@@ -390,7 +390,7 @@ int unittest1_c() {
 	
 	bool acceptable = ( ((double)isSameCounter / (double) 50) < (double) 0.05); // acceptable if not the same 95% of the time
 	allPass = allPass && acceptable && noError;
-	cout << "shuffle(player,gameState): " << PASS(acceptable) << " deck shuffle returned the deck the same < 5\% of the time. Result: "; percent(isSameCounter, 50); cout << "%\n";
+	cout << "shuffle(player,gameState): " << PASS(acceptable) << " deck shuffle returned the deck the same < 5% of the time. Result: "; percent(isSameCounter, 50); cout << "%\n";
 	cout << "shuffle(player,gameState): " << PASS(noError) << " deck shuffle produced no Errors during " << Counter << " runs of the previous test\n";
 
 
@@ -420,11 +420,120 @@ int unittest1_c() {
 	cout << "shuffle(player,gameState): " << PASS(acceptable) << " number of cards in deck remains unchanged: " << G.deckCount[player_i]<< endl;
 	allPass = allPass && acceptable;
 	cout << "shuffle(player,gameState): Unit Tests 1 - all tests." << PASS(acceptable) << endl;
-	return 0; 
+	return (allPass ? 0 :1); 
 }
 
 //  buyCard
-int unittest2_c() { return 1; }
+// Unit Test 1:  Module: Dominion.c    Function:  buyCard
+//    Calling Signature: int buyCard(int supplyPos, struct gameState *state);
+//  When you buy a card the following state is present:
+//		1) The phase is not fully defined in the program but presumably phases are Action, Buy, Cleanup as per the instructions.
+//				buy phase should be phase 1  (since there is not an enum for the buy phase)
+//		2) the state->numBuys should be set from the Action Phase
+//		3) the state->coins should be set from the Action Phase
+//	The act of buying should do the following
+//		1) Increase the number of cards in the players discard pile 
+//		2) supplyCount of the card chosen is reduced by 1
+//		3) you should not be permitted to buy a card that has none left
+//		4) buyCard should return failure (-1) if no buys are left
+//		5) buyCard should return failure if buy is attempted with insufficient coin
+//		6) buyCard should return failure if buyCard is called and phase is 0 or 2 (assuming 1 is phase == buy)
+//		7) failed attempts should not affect gameState
+//	Not to be Test as part of Buy -- (i.e. managed elsewhere or use integrated testing) 
+//		8) buying Provincial cards should increase the player score by 1 (but is this testing buyCard or Score??)
+//		9) -- buying and running out of cards affects the end of game trigger.  (this is managed in isGameOver() call)
+int unittest2_c() {
+	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
+	struct gameState G;
+	// TODO:  initializeGame can return -1 if it doesn't initialize.  No provision for this is accounted for - danKrueger
+	int seed = 2;
+	int numPlayers = 2;
+	initializeGame(numPlayers, k, seed, &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
+	 
+	bool allPass = true;
+
+	int player_i = whoseTurn(&G);
+	// Add 2 of each kingdom cards to player_i's deck
+	for (int i = 0; i < NUM_KINGDOM_CARDS; i++)
+	{
+		G.deck[player_i][G.deckCount[player_i]++] = k[i]; // should post increment  -- Double Check
+		G.deck[player_i][G.deckCount[player_i]++] = k[i];
+		G.supplyCount[k[i]]--; // reduce supply piles
+		G.supplyCount[k[i]]--; // reduce supply piles
+	}
+
+	struct gameState G_original;
+	memcpy(&G_original, &G, sizeof(gameState));
+	bool same = true; // isGameStateEqual(&G, &G_original); // test isGameState function
+
+	cout << "Unit Test 2: Module: dominion.c		Function---buyCard--\n";
+	cout << "Sample Deck: " << getDeckString(player_i, &G) << endl;
+
+	G.coins = 10; // give the current player 10 coins
+	//Test 1:  Current Player's discard pile increases
+	bool tResult = true;
+	int discardBeforeCount = G.discardCount[player_i]; 
+	int numCardsPurhcased = G.supplyCount[smithy];
+	G.coins = 4 * G.supplyCount[smithy];
+	G.numBuys = numCardsPurhcased+1;
+	for (int i = 0; i < numCardsPurhcased; i++)
+		buyCard(smithy, &G);
+
+	int discardAfterCount = G.discardCount[player_i];
+	tResult = (discardAfterCount == (discardBeforeCount + numCardsPurhcased));
+	allPass = allPass && tResult;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Purchasing all smithy cards increases player discard pile by " <<G.discardCount[player_i] << endl;
+
+
+	//Test 2: Supply Count reduces by 1
+	tResult = G_original.supplyCount[smithy] == G.supplyCount[smithy] + numCardsPurhcased;
+	allPass = allPass && tResult;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Purchasing Card Reduces smithy supply level by " << numCardsPurhcased<< endl;
+
+
+	//Test 3: You should not be allowed to buy a card with none left
+	// buy all the smithy (4 coins each) // Try and Buy again
+	tResult = (-1 == (buyCard(smithy, &G))  );
+	allPass = allPass && tResult;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Smithy Cards Left: " << G.supplyCount[smithy] << " attempt to purchase should fails."  << endl;
+
+
+	//Test 4 - Buy should fail if no buys are present
+	G.coins = 10;
+	buyCard(cutpurse, &G); // should use up the last buy
+	memcpy(&G_original, &G, sizeof(gameState)); // <------- For gameState on failure
+	tResult = (-1 == ((buyCard(cutpurse, &G))));
+	allPass = allPass && tResult;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Number of Buys Left: " << G.numBuys << " attempt to purchase should fail." << endl;
+	
+	
+	//Test 5) buyCard should return failure if buy is attempted with insufficient coin
+	G.coins = 2;
+	tResult = (-1 == ((buyCard(province, &G)))); // province card costs 6
+	allPass = allPass && tResult;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Number of coins left: " << G.coins<< " attempt to purchase province should fail." << endl;
+	
+	
+	//		6) buyCard should return failure if buyCard is called and phase is 0 or 2 (assuming 1 is phase == buy)
+	G.phase = 0;
+	G.coins = 7; // need coin to purchase providence card 
+	tResult = (-1 == ((buyCard(province, &G))));
+	allPass = allPass && tResult;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Game Phase:  Action " << " attempt to purchase province should fail for purchase not in Buy Phase of the game." << endl;
+	
+	//		7) failed attempts should not affect gameState
+	// We modfied G.coins and G.pahse duiring a tests
+	G.coins = G_original.coins;
+	G.phase = G_original.phase;
+	tResult = isGameStateEqual(&G, &G_original);
+	allPass = allPass && tResult;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " gameStates before and after attempted buys that fail should equal eachother" << endl;
+
+	cout << "buyCard(supplyPos,gameState): Unit Tests 2 - all tests." << PASS(allPass) << endl;
+	
+
+	
+	return (allPass ? 0: 1); }
 //	endTurn
 int unittest3_c() { return 1; }
 //  isGameOver
