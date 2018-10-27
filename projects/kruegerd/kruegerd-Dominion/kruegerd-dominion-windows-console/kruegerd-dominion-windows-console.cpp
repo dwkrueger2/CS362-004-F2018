@@ -28,11 +28,48 @@ extern "C++"
 #include "../../dominion/dominion_helpers.h"
 #include "../../dominion/dominion.h"
 #include "../../dominion/rngs.h"
-	int main_cardtest4();
+	//int main_cardtest4();
 }
 // Utilities
-string PASS(bool pvalue) { return (pvalue ? "PASS" : "FAIL"); }
-void percent(int a, int b) { double j = (double)a / (double)b; printf("%.2d", j); }
+#define mRED "\033[31m"
+#define mGREEN "\033[32m"
+#define mYELLOW "\033[33m"
+#define mBLUE "\033[34m"
+#define mPURPLE "\033[35m"
+#define mCYAN "\033[36m"
+#define mWHITE "\033[37m"
+#define mNONE "\033[0m"
+
+#ifdef _WIN32
+string PASS(bool pvalue) {
+	HANDLE  hConsole;
+	_CONSOLE_SCREEN_BUFFER_INFO  currentConsoleState;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleScreenBufferInfo(hConsole, &currentConsoleState);
+	cout.flush();
+	// Print sample colors
+	//for (int i = 0; i < 32; i++) {
+	//	SetConsoleTextAttribute(hConsole, i); // Fail is 12-red on black // Succes is 10 - Green on Black
+	//	cout << "Color Number: " << i << endl;
+	//}
+	if (pvalue)
+	{
+		SetConsoleTextAttribute(hConsole, 10); // Fail is 12-red on black // Succes is 10 - Green on Black
+		cout << "PASS ";
+	}
+	else {
+		SetConsoleTextAttribute(hConsole, 12); // Fail is 12-red on black // Succes is 10 - Green on Black
+		cout << "FAIL ";
+	}
+	// return console text to previous color
+	SetConsoleTextAttribute(hConsole, currentConsoleState.wAttributes); // return display state
+	cout.flush();
+	return ""; // already had code written to recieve a string and it kinda still works well (pvalue ? "PASS" : "FAIL");
+}
+#elif __linux__
+string PASS(bool pvalue) { return (pvalue ? mGREEN"PASS"mNONE : mRED"FAIL"mNONE); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
+#endif
+void percent(int a, int b) { float j = (float)a / (float)b; printf("%.2f", j); }
 /* Just returns the textual repesentation of the enumeration*/
 string getCardName(CARD c) {
 	switch (c) {
@@ -103,7 +140,7 @@ string getDeckString(int player_i, gameState * state)
 	stringstream ss;
 	ss << "{ ";
 	for (int i = 0; i < state->deckCount[player_i]; i++)
-		ss << getCardName((CARD)state->deck[player_i][i]) << " " << (i < (state->deckCount[player_i] -1) ? ",": "");
+		ss << getCardName((CARD)state->deck[player_i][i]) << (i < (state->deckCount[player_i] - 1) ? ", " : "");
 	ss << " }";
 	return ss.str();
 }
@@ -113,7 +150,7 @@ bool isGameStateEqual(gameState * G1, gameState * G2) {
 	bool isSame = true;
 	for (int offset = 0; offset < (sizeof(gameState) / sizeof(int)) && isSame; offset++)
 	{
-		int a = *(((int*)G1)+offset);
+		int a = *(((int*)G1) + offset);
 		int b = *(((int*)G2) + offset);
 
 		isSame = isSame && (a == b);
@@ -128,12 +165,15 @@ bool isGameStateEqual(gameState * G1, gameState * G2) {
 /// Plan to move to their own files later
 int unittest1_c(); // Shuffle
 int unittest2_c(); // Buy Card
-int unittest3_c();
-int unittest4_c();
-int cardtest1_c();
-int cardtest2_c();
-int cardtest3_c();
-int cardtest4_c();
+int unittest3_c(); // end turn
+int unittest4_c(); // is game over
+int cardtest1_c(); // smithy
+int cardtest2_c(); // adventurer
+int cardtest3_c(); // cutpurse
+int cardtest4_c(); // garden
+
+// Initializes the G to the same initial state for all card tests
+void CardTestInitializeGame(gameState * G);
 //// Write Up Requirements
 //  1) Bugs
 //  2) Test Coverages Section
@@ -144,7 +184,7 @@ int cardtest4_c();
 //TODO: 2) Write Card Tests
 //TODO: 3) Move Code to individual files and write MakeFile
 
-	
+
 
 
 
@@ -152,27 +192,51 @@ int cardtest4_c();
 /////////// Remember this....  To compile ".c" configureation Propertices--> C/C++ --> advanced --> compile as c++  
 ///////////    This is a difficult error because the files all compile fine with .c but they don't link well.. So you only get the error during the build 
 ///////////		 and only when the build determins a link is necessary
-
+//
 
 int playdom_c_main(int argc, const char** argv);
 
 int main(int argc, char ** argv)
 {
-		const char * args[] = { "0","2" }; // used to simulate args sent to playdom_c_main
-	//	cout << "Playing Simulated 2 player dominion game.\n";
-	//	playdom_c_main(2, args);
-		//cout << "---Running Sample cardtest4---\n";
-		//int outValue = main_cardtest4();
-		//cout << "---Results:  " << outValue << " ---\n";
-		
-		unittest1_c();
-		cout << "|________________________________________________________________|" << endl;
-		unittest2_c();
-		cout << "|________________________________________________________________|" << endl;
+	const char * args[] = { "0","2" }; // used to simulate args sent to playdom_c_main
+//	cout << "Playing Simulated 2 player dominion game.\n";
+//	playdom_c_main(2, args);
+	//cout << "---Running Sample cardtest4---\n";
+	//int outValue = main_cardtest4();
+	//cout << "---Results:  " << outValue << " ---\n";
+/*	cout << "This is testing " << PASS(true) << endl;
+	cout << "This is testing " << PASS(false) << endl;
+	cout << "End Test" << endl;
+//	return 0;
+	*/
 
-		cout << "[Press Enter to Exit]";
-		cin.get();
-		return 0;
+	cout << " ________________________________________________________________ " << endl;
+	cout << "|                                                                |" << endl;
+	cout << "|                     Unit Test 1                                |" << endl;
+	cout << "|________________________________________________________________|" << endl;
+	unittest1_c();
+	cout << " ________________________________________________________________ " << endl;
+	cout << "|                                                                |" << endl;
+	cout << "|                     Unit Test 2                                |" << endl;
+	cout << "|________________________________________________________________|" << endl;
+	unittest2_c();
+	cout << " ________________________________________________________________ " << endl;
+	cout << "|                                                                |" << endl;
+	cout << "|                     Unit Test 3                                |" << endl;
+	cout << "|________________________________________________________________|" << endl;
+	unittest3_c();
+	cout << " ________________________________________________________________ " << endl;
+	cout << "|                                                                |" << endl;
+	cout << "|                     Unit Test 4                                |" << endl;
+	cout << "|________________________________________________________________|" << endl;
+	unittest4_c();
+	cout << " ________________________________________________________________ " << endl;
+	cout << "|                                                                |" << endl;
+	cout << "|                     Card Test 1                                |" << endl;
+	cout << "|________________________________________________________________|" << endl;
+	cout << "[Press Enter to Exit]";
+	cin.get();
+	return 0;
 }
 
 
@@ -225,7 +289,7 @@ int playdom_c_main(int argc, const char** argv)
 				printf("smithy played.\n");
 				money = 0;
 				i = 0;
-				while (i<numHandCards(&G)) {
+				while (i < numHandCards(&G)) {
 					if (handCard(i, &G) == copper) {
 						playCard(i, -1, -1, -1, &G);
 						money++;
@@ -269,7 +333,7 @@ int playdom_c_main(int argc, const char** argv)
 				playCard(adventurerPos, -1, -1, -1, &G);
 				money = 0;
 				i = 0;
-				while (i<numHandCards(&G)) {
+				while (i < numHandCards(&G)) {
 					if (handCard(i, &G) == copper) {
 						playCard(i, -1, -1, -1, &G);
 						money++;
@@ -344,8 +408,8 @@ int unittest1_c() {
 	int numPlayers = 2;
 	initializeGame(numPlayers, k, seed, &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
 
-	
-	
+
+
 	bool allPass = true;
 
 	/*int numSmithies = 0;
@@ -374,10 +438,10 @@ int unittest1_c() {
 	for (int j = 0; j < 50; j++) // with only 5 cards in the deck the probility of randomizing the deck returning the same deck is 50*(1:120)
 	{
 		Counter++;
-		
+
 		noError = noError && (shuffle(player_i, &G) == 0);
 		if (j < 5) // print the first 5 shuffles
-			cout << "Suffle No " << j <<": " << getDeckString(player_i, &G)<< endl;
+			cout << "Suffle No " << j << ": " << getDeckString(player_i, &G) << endl;
 		isSame = true;
 		for (int i = 0; i < G.deckCount[player_i]; i++)
 			isSame = (deckCopy[i] == G.deck[player_i][i]) && isSame;
@@ -387,8 +451,8 @@ int unittest1_c() {
 		for (int i = 0; i < G.deckCount[player_i]; i++)
 			deckCopy[i] = G.deck[player_i][i];
 	}
-	
-	bool acceptable = ( ((double)isSameCounter / (double) 50) < (double) 0.05); // acceptable if not the same 95% of the time
+
+	bool acceptable = (((double)isSameCounter / (double)50) < (double) 0.05); // acceptable if not the same 95% of the time
 	allPass = allPass && acceptable && noError;
 	cout << "shuffle(player,gameState): " << PASS(acceptable) << " deck shuffle returned the deck the same < 5% of the time. Result: "; percent(isSameCounter, 50); cout << "%\n";
 	cout << "shuffle(player,gameState): " << PASS(noError) << " deck shuffle produced no Errors during " << Counter << " runs of the previous test\n";
@@ -411,20 +475,20 @@ int unittest1_c() {
 	{
 		acceptable = acceptable && (cardTypes_after[c] == cardTypes[c]); // count card types before and after shuffle
 	}
-	cout << "shuffle(player,gameState): " << PASS(acceptable) << " deck has the same constituent of cards.\n"; 
+	cout << "shuffle(player,gameState): " << PASS(acceptable) << " deck has the same constituent of cards.\n";
 	allPass = allPass && acceptable;
 	// Test 3 = total count of cards is the same
 	int numCardsBefore = G.deckCount[player_i];
 	shuffle(player_i, &G);
 	acceptable = (numCardsBefore == G.deckCount[player_i]);
-	cout << "shuffle(player,gameState): " << PASS(acceptable) << " number of cards in deck remains unchanged: " << G.deckCount[player_i]<< endl;
+	cout << "shuffle(player,gameState): " << PASS(acceptable) << " number of cards in deck remains unchanged: " << G.deckCount[player_i] << endl;
 	allPass = allPass && acceptable;
 	cout << "shuffle(player,gameState): Unit Tests 1 - all tests." << PASS(acceptable) << endl;
-	return (allPass ? 0 :1); 
+	return (allPass ? 0 : 1);
 }
 
 //  buyCard
-// Unit Test 1:  Module: Dominion.c    Function:  buyCard
+// Unit Test 2:  Module: Dominion.c    Function:  buyCard
 //    Calling Signature: int buyCard(int supplyPos, struct gameState *state);
 //  When you buy a card the following state is present:
 //		1) The phase is not fully defined in the program but presumably phases are Action, Buy, Cleanup as per the instructions.
@@ -449,7 +513,7 @@ int unittest2_c() {
 	int seed = 2;
 	int numPlayers = 2;
 	initializeGame(numPlayers, k, seed, &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
-	 
+
 	bool allPass = true;
 
 	int player_i = whoseTurn(&G);
@@ -472,30 +536,30 @@ int unittest2_c() {
 	G.coins = 10; // give the current player 10 coins
 	//Test 1:  Current Player's discard pile increases
 	bool tResult = true;
-	int discardBeforeCount = G.discardCount[player_i]; 
+	int discardBeforeCount = G.discardCount[player_i];
 	int numCardsPurhcased = G.supplyCount[smithy];
 	G.coins = 4 * G.supplyCount[smithy];
-	G.numBuys = numCardsPurhcased+1;
+	G.numBuys = numCardsPurhcased + 1;
 	for (int i = 0; i < numCardsPurhcased; i++)
 		buyCard(smithy, &G);
 
 	int discardAfterCount = G.discardCount[player_i];
 	tResult = (discardAfterCount == (discardBeforeCount + numCardsPurhcased));
 	allPass = allPass && tResult;
-	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Purchasing all smithy cards increases player discard pile by " <<G.discardCount[player_i] << endl;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Purchasing all smithy cards increases player discard pile by " << G.discardCount[player_i] << endl;
 
 
 	//Test 2: Supply Count reduces by 1
 	tResult = G_original.supplyCount[smithy] == G.supplyCount[smithy] + numCardsPurhcased;
 	allPass = allPass && tResult;
-	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Purchasing Card Reduces smithy supply level by " << numCardsPurhcased<< endl;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Purchasing Card Reduces smithy supply level by " << numCardsPurhcased << endl;
 
 
 	//Test 3: You should not be allowed to buy a card with none left
 	// buy all the smithy (4 coins each) // Try and Buy again
-	tResult = (-1 == (buyCard(smithy, &G))  );
+	tResult = (-1 == (buyCard(smithy, &G)));
 	allPass = allPass && tResult;
-	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Smithy Cards Left: " << G.supplyCount[smithy] << " attempt to purchase should fails."  << endl;
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Smithy Cards Left: " << G.supplyCount[smithy] << " attempt to purchase should fails." << endl;
 
 
 	//Test 4 - Buy should fail if no buys are present
@@ -505,22 +569,22 @@ int unittest2_c() {
 	tResult = (-1 == ((buyCard(cutpurse, &G))));
 	allPass = allPass && tResult;
 	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Number of Buys Left: " << G.numBuys << " attempt to purchase should fail." << endl;
-	
-	
+
+
 	//Test 5) buyCard should return failure if buy is attempted with insufficient coin
 	G.coins = 2;
 	tResult = (-1 == ((buyCard(province, &G)))); // province card costs 6
 	allPass = allPass && tResult;
-	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Number of coins left: " << G.coins<< " attempt to purchase province should fail." << endl;
-	
-	
+	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Number of coins left: " << G.coins << " attempt to purchase province should fail." << endl;
+
+
 	//		6) buyCard should return failure if buyCard is called and phase is 0 or 2 (assuming 1 is phase == buy)
 	G.phase = 0;
 	G.coins = 7; // need coin to purchase providence card 
 	tResult = (-1 == ((buyCard(province, &G))));
 	allPass = allPass && tResult;
 	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " Game Phase:  Action " << " attempt to purchase province should fail for purchase not in Buy Phase of the game." << endl;
-	
+
 	//		7) failed attempts should not affect gameState
 	// We modfied G.coins and G.pahse duiring a tests
 	G.coins = G_original.coins;
@@ -530,18 +594,313 @@ int unittest2_c() {
 	cout << "buyCard(supplyPos,gameState): " << PASS(tResult) << " gameStates before and after attempted buys that fail should equal eachother" << endl;
 
 	cout << "buyCard(supplyPos,gameState): Unit Tests 2 - all tests." << PASS(allPass) << endl;
-	
 
-	
-	return (allPass ? 0: 1); }
+
+
+	return (allPass ? 0 : 1);
+}
+
+
 //	endTurn
-int unittest3_c() { return 1; }
+// Unit Test 3:  Module: Dominion.c    Function:  endTurn
+//    Calling Signature: int buyCard(struct gameState *state);
+//  EndTurn  means that all actions are complete and all buys are complete.  Depending on the rules the player could be required to 
+//		make a play. We will not test for this since some of the online games do not force an player to play.  For example when 
+//		buy are left unused then a player does not have to take a copper which costs 0.
+//
+//		The end turn expected actions are as follows:
+//			1) Remaining cards in hand return to discard pile
+//			2) Card content of player the same (all piles combined) before and after end turn)
+//			3) Last card in hand discarded (or one of the cards in hand) ends up on top for everyone to see
+//			4) Game State is modified as follows:
+//					Player set to next player - test for multiple players
+//				  coins set to 0
+//					actions set to 1
+//				  buys set to 1
+//			5) the ending player's hand draws 5 cards / decreasing deck / shuffling etc.
+//			6) phase should be set to 0 indicating the phase is action when the next player starts
+//
+//		looking through the code it's discovered that the game uses the updateCoins function 
+//			to modify the state.coins to match what is in the Hand.  The state.hand is the set of 
+//			cards that are not played but counted during the buy phase.
+
+//
+
+int unittest3_c() {
+	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
+	struct gameState G;
+	// TODO:  initializeGame can return -1 if it doesn't initialize.  No provision for this is accounted for - danKrueger
+	int seed = 2;
+	int numPlayers = 4;
+	initializeGame(numPlayers, k, seed, &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
+
+	bool allPass = true;
+
+	int player_i = whoseTurn(&G);
+	// Add 1 of each kingdom cards to player_i's deck
+	for (int i = 0; i < NUM_KINGDOM_CARDS; i++)
+	{
+		G.deck[player_i][G.deckCount[player_i]++] = k[i]; // should post increment  -- Double Check
+		G.supplyCount[k[i]]--; // reduce supply piles
+	}
+	// Set game state on something that we should be able to see change
+	G.coins = 2;// not uncomon to have 1/2 coins left unspent
+	G.numBuys = 1;// not uncommon to not have enough to make a purchase and refuse a copper (cost =0 for copper)
+	/// Take a card from the smithy supply pile and put it in the had to play
+	G.supplyCount[smithy]--;
+	G.hand[player_i][G.handCount[player_i]] = smithy;
+	G.handCount[player_i]++;
+	///  Take a card from the smity supply pile and put it in the playedCards 
+	G.supplyCount[smithy]--;
+	G.playedCards[G.playedCardCount] = smithy;
+	G.playedCardCount++;
+
+	// Now at end of Turn there should be 3 smithy cards either in the Deck or in the discard pile
+
+	//////////////////////END GAME STATE SETUP /////////////////
+	struct gameState G_original;
+	memcpy(&G_original, &G, sizeof(gameState));
+	bool same = true; // isGameStateEqual(&G, &G_original); // test isGameState function
+
+	bool tResult = true;
+	/////////////////////// START TESTS ///////////////////////
+	cout << "Unit Test 3: Module: dominion.c		Function---endTurn--\n";
+	cout << "Sample Deck: " << getDeckString(player_i, &G) << endl;
+	endTurn(&G);
+	// 1) Remaining cards in had return to discard pile
+	int expectedValue = G_original.discardCount[player_i] + G_original.handCount[player_i];
+	tResult = expectedValue == G.discardCount[player_i];
+	allPass = allPass && tResult;
+	cout << "T1: endTurn(gameState): " << PASS(tResult) << " Previous Hand Cards (#" << G_original.handCount[player_i]
+		<< ") added to discard, previous discard (#" << G_original.discardCount[player_i] << ") result discard pile (#"
+		<< G.discardCount[player_i] << ")\n";
+
+	// T2: Content of cards for player 1 remains the same
+	{// for folding code
+		int allCards1[treasure_map + 1] = { 0 };
+		int allCards2[treasure_map + 1] = { 0 };
+		// Total Card Counts
+		int originalCount = G_original.handCount[player_i]
+			+ G_original.deckCount[player_i]
+			+ G_original.discardCount[player_i]
+			+ G_original.playedCardCount;
+		int endTurnCount = G.handCount[player_i]
+			+ G.deckCount[player_i]
+			+ G.discardCount[player_i]
+			+ G.playedCardCount;
+
+
+		// Count Cards in Hand
+		for (int i = 0; i < G_original.handCount[player_i]; i++)
+		{
+			allCards1[G_original.hand[player_i][i]]++;
+		}
+		for (int i = 0; i < G.handCount[player_i]; i++)
+		{
+			allCards2[G.hand[player_i][i]]++;
+		}
+		// Count Cards in Deck
+		for (int i = 0; i < G_original.deckCount[player_i]; i++)
+		{
+			allCards1[G_original.deck[player_i][i]]++;
+		}
+		for (int i = 0; i < G.deckCount[player_i]; i++)
+		{
+			allCards2[G.deck[player_i][i]]++;
+		}
+		// Count Cards Played
+		for (int i = 0; i < G_original.playedCardCount; i++)
+		{
+			allCards1[G_original.playedCards[i]]++;
+		}
+		for (int i = 0; i < G.playedCardCount; i++)
+		{
+			allCards2[G.playedCards[i]]++;
+		}
+		// Count Cards Discarded
+		for (int i = 0; i < G_original.discardCount[player_i]; i++)
+		{
+			allCards1[G_original.discard[player_i][i]]++;
+		}
+		for (int i = 0; i < G.discardCount[player_i]; i++)
+		{
+			allCards2[G.discard[player_i][i]]++;
+		}
+		// check if content is the smae
+		tResult = true;
+		for (int i = 0; i < treasure_map + 1; i++)
+			tResult = tResult && (allCards1[i] == allCards2[i]);
+		allPass = allPass && tResult;
+		cout << "T2a: endTurn(gameState):" << PASS(tResult) << " Card Content is exactly the same before and after end turn for player " << player_i << endl;
+		tResult = (originalCount == endTurnCount);
+		allPass = allPass && tResult;
+		cout << "T2b: endTurn(gameState):" << PASS(tResult) << " Total Cards before end turn (# " << originalCount
+			<< ") equal count at end of turn (#" << endTurnCount << ") for player: " << player_i << endl;
+	}
+	// T3: Last Discard card was in hand (because only the last discarded card is shown to all players)
+	{ // for folding code
+		// TODO: really the cards in the hand/played/discard should be set so that this test is deterministic rather than probabilistic (i.e. make the 5 hand cards unique)
+		tResult = false;
+		for (int i = 0; i < G_original.handCount[player_i]; i++)
+			tResult = tResult || (G_original.hand[player_i][i] == G.discard[player_i][G.discardCount[player_i] - 1]);
+		allPass = allPass && tResult;
+		cout << "T3: endTurn(gameState):" << PASS(tResult) << " Top Discard pile card was in hand at end of turn\n";
+	}
+	// T4: Game State is modified as follows:
+		//					Player set to next player - test for multiple players
+		//				  coins set to 0
+		//					actions set to 1
+		//				  buys set to 1
+	{ // for code folding
+		tResult = G.whoseTurn == ((player_i + 1) % numPlayers); //should be the next Player
+		allPass = allPass && tResult;
+		cout << "T4a: endTurn(gameState):" << PASS(tResult) << " Next Player Correct after endTurn. Current Player: " <<
+			player_i << " Next Player: " << G.whoseTurn << endl;
+		tResult = (0 == G.coins);
+		allPass = allPass && tResult;
+		cout << "T4b: endTurn(gameState):" << PASS(tResult) << " Coins are set to 0: state.coins = " << G.coins << endl;
+		tResult = (1 == G.numActions);
+		allPass = allPass && tResult;
+		cout << "T4c: endTurn(gameState):" << PASS(tResult) << " Number of Actions is 1: state.numActions = " << G.numActions << "\n";
+		tResult = (1 == G.numBuys);
+		allPass = allPass && tResult;
+		cout << "T4d: endTurn(gameState):" << PASS(tResult) << " Number of Buys is 1: state.numBuys = " << G.numBuys << "\n";
+
+	}
+	//			5) the ending player's hand draws 5 cards / decreasing deck / shuffling etc.
+	// The last thing a player does is draw 5 cards. if there are not enough discard cards they are shuffled
+	//		we already tested the quantity of cards to be the same.  drawCard takes the card at deckCount -1
+	//		position and puts it in the hand 
+	//		We are just going to test for 5 cards in the hand and put the Other Tests as TODO items
+	//	TODO: reset gameState, make deckCount 3 , test for those 3 cards in hand + 2 more
+	{
+		tResult = (5 == G.handCount[player_i]);
+		allPass = allPass && tResult;
+		cout << "T5: endTurn(gameState):" << PASS(tResult) << " Player has 5 cards in hand after endTurn\n";
+	}
+	//			6) phase should be set to 0 indicating the phase is action when the next player starts
+	tResult = (G.phase == 0);
+	allPass = allPass && tResult;
+	cout << "T6: endTurn(gameState):" << PASS(tResult) << " gameState.phase set to Action(0): state.phase = " << G.phase << endl;
+
+	cout << "endTurn(gameState): Unit Tests 3 - all tests:" << PASS(allPass) << endl;
+	return 0;
+}
 //  isGameOver
-int unittest4_c() { return 1; }
+// Unit Test 4:  Module: Dominion.c    Function:  isGameOver
+//    Calling Signature: int buyCard(struct gameState *state);
+//		*** Note: the isGameOver returns 0 when false and 1 if true... This is contrary to the use
+//			troughout other aspects of the program were 0 = success and nonzero indicates failure.
+//			We are going to take this as intential
+//  
+//		Game ends when the follow criteria are met:
+//			1) A player's turn os over
+//			and
+//				2) All the province cards are purchased
+//				or
+//				3) any 3 supply piles are empty (coins/estate/duchy/curse cards are all part of the supply)
+//
+//		Testing Plan
+//			1) T1 - Initial state should be false because all supply piles have cards
+//			2) T2 - Set Province supply to =0 expect true to game over
+//			3) T3 - Reset Province supply to !=0 and Set Estate, Duchy and Smithy supply to 0 expect true to game over
+//			4) T4 - Reset smithy != 0 and Curse = 0 expect true to game over
+//			5) T5 - Reset Estate, Dutchy != 0 and set 3 kingdom cards to 0 expect true to game over
+//		  6) T6 - Set all 5 Kigdom cards = 0 expect true to game over
+//			**** Note all permutations are not checked but theoretically could be 5 kingdom cards this leaves 
+//				a total of 12 cards, which with the province !=0 leaves only 11 pick 3 combinations or 165 permutations.  but 2048 
+//				(2^11) when more than 3 cards can be empty. For the scope if the unit test however, it seems
+//				practical to just test the sub groups of cards to make sure they are not overlooked.
+int unittest4_c() {
+	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
+	struct gameState G;
+	// TODO:  initializeGame can return -1 if it doesn't initialize.  No provision for this is accounted for - danKrueger
+	int seed = 2;
+	int numPlayers = 4;
+	initializeGame(numPlayers, k, seed, &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
+
+	bool allPass = true;
+	bool tResult = true;
+
+	int player_i = whoseTurn(&G);
+	// set phase to 0 indicating end of turn
+
+	// Note isGameOver returns 0 for false and 1 for true
+	// T1 test check if game over with initial setup
+	tResult = (0 == isGameOver(&G));
+	allPass = allPass && tResult;
+	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns False (0) after initial setup\n";
+
+	// T2 test check if game over if province supply is 0
+	G.supplyCount[province] = 0;
+	tResult = (1 == isGameOver(&G));
+	allPass = allPass && tResult;
+	cout << "T2: isGameOver(gameState):" << PASS(tResult) << " Returns True when Province Supply = 0\n";
+
+	// T3 - Reset Province supply to !=0 and Set Estate, Duchy and Smithy supply to 0 expect true to game over
+	G.supplyCount[province] = 6;
+	G.supplyCount[duchy] = 0;
+	G.supplyCount[estate] = 0;
+	G.supplyCount[smithy] = 0;
+	tResult = (1 == isGameOver(&G));
+	allPass = allPass && tResult;
+	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns True when Estate,Duchy, & Smithy Supply = 0\n";
+
+
+	//	4) T4 - Reset smithy != 0 and Curse = 0 expect true to game over
+	G.supplyCount[smithy] = 6; // assertion at this point is no empty piles exist becuase of initial setup.
+	G.supplyCount[duchy] = 0;
+	G.supplyCount[estate] = 0;
+	G.supplyCount[curse] = 0;
+	tResult = (1 == isGameOver(&G));
+	allPass = allPass && tResult;
+	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns True when Estate,Duchy, & Curse Supply = 0\n";
+
+	//			5) T5 - Reset Estate, Dutchy != 0 and set 3 kingdom cards to 0 expect true to game over
+	G.supplyCount[duchy] = 6;
+	G.supplyCount[estate] = 6;
+	G.supplyCount[smithy] = 0;
+	G.supplyCount[adventurer] = 0;
+	G.supplyCount[cutpurse] = 0;
+	tResult = (1 == isGameOver(&G));
+	allPass = allPass && tResult;
+	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns True when smithy, adventurer, cutpurse Supply = 0\n";
+
+	// T6 - Set all 5 Kigdom cards = 0 expect true to game over
+	G.supplyCount[gardens] = 0;
+	G.supplyCount[village] = 0;
+	tResult = (1 == isGameOver(&G));
+	allPass = allPass && tResult;
+	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns True when smithy, adventurer, cutpurse, gardens, village Supply = 0\n";
+
+	return allPass ? 0 : 1;
+}
+
+// Initializes the G to the same initial state for all card tests
+void CardTestInitializeGame(gameState * G)
+{
+	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
+	// TODO:  initializeGame can return -1 if it doesn't initialize.  No provision for this is accounted for - danKrueger
+	int seed = 2;
+	int numPlayers = 2;
+	initializeGame(numPlayers, k, seed, G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
+
+	bool allPass = true;
+
+	int player_i = whoseTurn(G);
+	// Add 2 of each kingdom cards to player_i's deck
+	for (int i = 0; i < NUM_KINGDOM_CARDS; i++)
+	{
+		G->deck[player_i][G->deckCount[player_i]++] = k[i]; // should post increment  -- Double Check
+		G->supplyCount[k[i]]--; // reduce supply piles
+	}
+}
 
 // Smith Card Unit Test
 int cardtest1_c() { return 1; };
 // Adventurer Car Unit Test
 int cardtest2_c() { return 1; };
+// cutpurse
 int cardtest3_c() { return 1; };
+// garden
 int cardtest4_c() { return 1; };

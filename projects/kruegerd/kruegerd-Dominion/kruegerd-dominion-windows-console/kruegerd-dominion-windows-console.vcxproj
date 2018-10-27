@@ -149,19 +149,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\dominion\dominion.c" />
+    <ClCompile Include="..\..\dominion\rngs.c" />
     <ClCompile Include="..\Dominion-Linux\example-cardtest4.c" />
     <ClCompile Include="kruegerd-dominion-windows-console.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\dominion_c\dominion_c.vcxproj">
-      <Project>{3cab81fd-e08a-400f-ab8b-2e21b0b2df5c}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\rngs_c\rngs_c.vcxproj">
-      <Project>{a2724a53-d31d-4aa1-851f-69ddb88d1657}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Text Include="MAKEFILE" />
