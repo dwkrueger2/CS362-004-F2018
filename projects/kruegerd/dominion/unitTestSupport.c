@@ -3,7 +3,7 @@
 //#			Course:		362 Software Engineering II
 //#			Project:	Dominion Card Game Testing - Assignment 3,4
 //#
-//#			File:			unitTestSupport.c 
+//#			File:			unitTestSupport.c - Implementation
 //#								This file provides supporting functions that the 
 //#								testing programs will rely on.
 //#
@@ -12,7 +12,8 @@
 //#
 //#			Functions:
 //#######################################################################
-#ifndef UNITTESTSUPPORT_C
+
+
 
 #include <iostream>
 #include <iomanip>
@@ -26,27 +27,14 @@
 #include <ctime>
 #include <climits>
 
-#ifdef _WIN32
-#include <Windows.h>
-#elif __linux__
-#include <ctime>
-#endif // (_WIN32)
+#include "unitTestSupport.h"
+
 using namespace std;
 
 
-// Utilities
-#ifdef __linux__  // add tty color codes
-#define mRED "\033[31m"
-#define mGREEN "\033[32m"
-#define mYELLOW "\033[33m"
-#define mBLUE "\033[34m"
-#define mPURPLE "\033[35m"
-#define mCYAN "\033[36m"
-#define mWHITE "\033[37m"
-#define mNONE "\033[0m"
-#endif
 
-#ifdef _WIN32
+
+#ifdef _WIN32  // Windows and Linux require different implementations for color coding text on the console screen
 string PASS(bool pvalue) {
 	HANDLE  hConsole;
 	_CONSOLE_SCREEN_BUFFER_INFO  currentConsoleState;
@@ -75,8 +63,12 @@ string PASS(bool pvalue) {
 #elif __linux__
 string PASS(bool pvalue) { return (pvalue ? mGREEN"PASS"mNONE : mRED"FAIL"mNONE); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
 #endif
-void percent(int a, int b) { float j = (float)a / (float)b; printf("%.2f", j); }
-/* Just returns the textual repesentation of the enumeration*/
+
+
+
+void percent(int a, int b) { float j = (float)a / (float)b; printf("%.2f", j); } // just prins a 2 decimaled % value of a/b
+
+/* Just returns the textual repesentation of the enumeration CARD*/
 string getCardName(CARD c) {
 	switch (c) {
 		case curse:
@@ -140,4 +132,31 @@ string getCardName(CARD c) {
 			return "error";
 	}
 }
-#endif // !UNITTESTSUPPORT_C
+
+/*Returns a textual representation of the current deck (the draw pile)*/
+string getDeckString(int player_i, gameState * state)
+{
+	stringstream ss;
+	ss << "{ ";
+	for (int i = 0; i < state->deckCount[player_i]; i++)
+		ss << getCardName((CARD)state->deck[player_i][i]) << (i < (state->deckCount[player_i] - 1) ? ", " : "");
+	ss << " }";
+	return ss.str();
+}
+// a member by member (byte by byte) comparison of items in the gamestate
+bool isGameStateEqual(gameState * G1, gameState * G2) {
+
+	bool isSame = true;
+	for (int offset = 0; offset < (sizeof(gameState) / sizeof(int)) && isSame; offset++)
+	{
+		int a = *(((int*)G1) + offset);
+		int b = *(((int*)G2) + offset);
+
+		isSame = isSame && (a == b);
+
+		//isSame = isSame && (*(((int *)G1) + offset)) == *((int *)(G2 + offset))); // basically looking at every int size memory piece and seeing if the stuff at that location is identical
+		// structures are concurrently ordered in memory so this should work.
+	}
+	//G2->playedCardCount++;
+	return isSame;
+}

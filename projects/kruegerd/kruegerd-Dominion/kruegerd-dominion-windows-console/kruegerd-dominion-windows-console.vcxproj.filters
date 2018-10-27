@@ -27,11 +27,19 @@
     <ClCompile Include="..\..\dominion\rngs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dominion\unitTestSupport.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="MAKEFILE" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\dominion\unitTestSupport.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

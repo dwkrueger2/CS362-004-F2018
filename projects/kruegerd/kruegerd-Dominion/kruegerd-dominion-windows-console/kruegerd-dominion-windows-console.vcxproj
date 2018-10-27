@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\dominion\dominion.c" />
     <ClCompile Include="..\..\dominion\rngs.c" />
+    <ClCompile Include="..\..\dominion\unitTestSupport.c" />
     <ClCompile Include="..\Dominion-Linux\example-cardtest4.c" />
     <ClCompile Include="kruegerd-dominion-windows-console.cpp" />
   </ItemGroup>
@@ -159,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="MAKEFILE" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\dominion\unitTestSupport.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
