@@ -144,7 +144,7 @@ reflect the effect on the game.
 cardEffect is the original function and left as the default for other cards that are no included in the 5 functions explicetly called. 
 */
 int cardEffectSmithy(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
-int cardEffectAdventurer(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+int cardEffectAdventurer( struct gameState *state);
 int cardEffectGardens(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
 int cardEffectVillage(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
 int cardEffectCutPurse(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);

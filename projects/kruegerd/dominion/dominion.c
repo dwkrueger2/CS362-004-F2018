@@ -672,7 +672,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	switch (card)
 	{
 		case adventurer:
-			cardEffectAdventurer(card, choice1, choice2, choice3, state, handPos, bonus);
+			cardEffectAdventurer(state);
 
 		case council_room:
 		{
@@ -1194,7 +1194,8 @@ int cardEffectSmithy(int card, int choice1, int choice2, int choice3, struct gam
 	discardCard(handPos, currentPlayer, state, 0);
 	return 0;
 }
-int cardEffectAdventurer(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus) {
+int cardEffectAdventurer(struct gameState *state) {
+	int card = adventurer;
 	//int i;
 	//int j;
 	//int k;
