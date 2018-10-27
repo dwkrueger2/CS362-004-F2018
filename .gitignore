@@ -13,7 +13,8 @@
 *.idb
 *.log
 *.pch
-/.vs/*
+**/.vs/
+**/v15/
 
 
 /projects/kruegerd/kruegerd-Dominion/kruegerd-dominion-windows-console/Debug/vc141.pdb
