@@ -1086,7 +1086,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			return 0;
 		}
 		case cutpurse:
-			cardEffectCutPurse(card, choice1, choice2, choice3, state, handPos, bonus);
+			cardEffectCutPurse( state, handPos);
 
 
 		case embargo:
@@ -1250,7 +1250,8 @@ int cardEffectVillage(int card, int choice1, int choice2, int choice3, struct ga
 	discardCard(handPos, currentPlayer, state, 0);
 	return 0;
 }
-int cardEffectCutPurse(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus) {
+int cardEffectCutPurse( struct gameState *state, int handPos) {
+	int card = cutpurse;
 	int i;
 	int j;
 	int k;
