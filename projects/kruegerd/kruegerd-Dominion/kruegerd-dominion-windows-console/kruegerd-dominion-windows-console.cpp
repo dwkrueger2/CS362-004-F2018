@@ -1005,9 +1005,7 @@ int cardtest2_c() {
 	memcpy(&G_original, &G, sizeof(gameState));
 
 	cardEffectAdventurer( &G); // the cardEffect signature is very odd to me... How coins are tracked is odd.
-
-
-	// Smithy effect 
+ 
 	bool allPass = true;
 	bool tResult = true;
 
@@ -1021,13 +1019,15 @@ int cardtest2_c() {
 
 	// T2 with permutations
 	// In order to run the permutations we need to make sure there are 2 Treasure cards in the discard pile
-	G.discard[player_i][G.discardCount[player_i] - 1] = silver;
-	G.discardCount[player_i]++;
-	G.discard[player_i][G.discardCount[player_i] - 1] = gold;
-	G.discardCount[player_i]++;
+	memcpy(&G, &G_original, sizeof(gameState)); // return state to the original state
+	G.deck[player_i][G.deckCount[player_i] ] = silver;
+	G.deckCount[player_i]++;
+	G.deck[player_i][G.deckCount[player_i] ] = gold;
+	G.deckCount[player_i]++;
+	memcpy(&G_original, &G, sizeof(gameState)); // reset the original state to have the 2 cards
 	int failedPermutations = 0;
 	int totalPermutations = 0;
-	cout << "Permutation No: " << "\tCoin Before" << "\tCoin After" <<  "\tValue Increase"
+	cout << "Perm No: " << "\tCoin Before" << "\tCoin After" <<  "\tValue Increase"
 		<< "\tCard Count Same"<<"\tHandCount+2"<<"\tBuys/Actions Same"<< endl; // 7 fields
 	for (int c1 = 0; c1 < 2; c1++) { // 1st Card
 		CARD card1 = c1 ? smithy : copper;
@@ -1037,7 +1037,7 @@ int cardtest2_c() {
 				CARD card3 = c3 ? smithy : silver;
 				for (int c4 = 0; c4 < 2; c4++) { // 1st Card
 					CARD card4 = c4 ? smithy : copper;
-					for (int c5 = 0; c5 < 2; c4++) { // 1st Card
+					for (int c5 = 0; c5 < 2; c5++) { // 1st Card
 						CARD card5 = c5 ? smithy : copper;
 						// all 32 Permutations of 5 cards covered here
 						totalPermutations++;
@@ -1047,6 +1047,25 @@ int cardtest2_c() {
 						G.deck[player_i][3] = card4;
 						G.deck[player_i][4] = card5;
 						memcpy(&G_original, &G, sizeof(gameState));
+						stringstream ss_Permutation;
+						for (int j = 0; j < G.deckCount[player_i]; j++)
+						{
+							switch (G.deck[player_i][j]) {
+								case copper:
+									ss_Permutation << "T";
+									break;
+								case silver:
+									ss_Permutation << "T";
+									break;
+								case gold:
+									ss_Permutation << "T";
+									break;
+								default:
+									ss_Permutation << "K";
+									break;
+							}
+
+						}
 						cardEffectAdventurer(&G); // the cardEffect signature is very odd to me... How coins are tracked is odd.
 						// Check Total Card Count
 						//		T1-Repeat  Total Count of cards remain the same
@@ -1070,6 +1089,8 @@ int cardtest2_c() {
 								case gold:
 									coinCountAfter += 6;
 									break;
+								default:
+									break;
 							}
 
 						}
@@ -1085,31 +1106,57 @@ int cardtest2_c() {
 								case gold:
 									coinCountBefore += 6;
 									break;
+								default:
+									break;
 							}
 						}
+						
 						bool tResult_valueIncrease = (coinCountBefore < coinCountAfter);
 						allPass = allPass && tResult_valueIncrease &&tResult_TotalCardCount&&tResult_HandCount_plus2
 							&&tResult_Buys_Actions_same;
 						{ // print results: brack for code folding only
-							cout << ""<< totalPermutations << coinCountBefore <<  coinCountAfter;
+							cout << "" << totalPermutations <<"-";
+							cout << ss_Permutation.str();
+							cout << "\t\t" << coinCountBefore << "\t\t" << coinCountAfter << "\t";
 							PASS(tResult_valueIncrease);
+							cout << "\t\t\t";
 							PASS(tResult_TotalCardCount);
+							cout << "\t\t";
 							PASS(tResult_HandCount_plus2);
+							cout << "\t\t";
 							PASS(tResult_Buys_Actions_same);
 						}
 						cout << endl;
-
+						// reset the deck otherwise discards keep piling up
+						memcpy(&G, &G_original, sizeof(gameState));
 					}
 				}
 			}
 		}
 	}
-
+	// TODO: Build same test with required shuffle of Discarded Cards
 
 	cout << "Card Test 2- Adventurer - all tests:" << PASS(allPass) << endl;
 	return allPass;
 };
 // cutpurse
-int cardtest3_c() { return 1; };
+// Each Other Player discards a copper or reveals a hand without a copper
+int cardtest3_c() {
+	gameState G;
+	CardTestInitializeGame(&G); // initial state + 1 of each of the 5 supply cards in the deck
+	int player_i = whoseTurn(&G);
+
+	// Add Smithy card to the 5th Hand Position
+	G.hand[player_i][G.handCount[player_i]] = smithy;
+	G.handCount[player_i]++; // hand should have 6 cards at this point
+
+	struct gameState G_original;
+	memcpy(&G_original, &G, sizeof(gameState));
+
+	cardEffectAdventurer(&G); // the cardEffect signature is very odd to me... How coins are tracked is odd.
+
+	bool allPass = true;
+	bool tResult = true;
+	return 1; };
 // garden
 int cardtest4_c() { return 1; };
