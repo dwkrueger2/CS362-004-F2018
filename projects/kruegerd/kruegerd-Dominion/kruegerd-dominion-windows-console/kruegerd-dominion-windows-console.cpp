@@ -232,8 +232,14 @@ int main(int argc, char ** argv)
 	unittest4_c();
 	cout << " ________________________________________________________________ " << endl;
 	cout << "|                                                                |" << endl;
-	cout << "|                     Card Test 1                                |" << endl;
+	cout << "|                     Card Test 1 - Smithy Test                  |" << endl;
 	cout << "|________________________________________________________________|" << endl;
+	cardtest1_c();
+	cout << " ________________________________________________________________ " << endl;
+	cout << "|                                                                |" << endl;
+	cout << "|                     Card Test 2 - Adventurer                   |" << endl;
+	cout << "|________________________________________________________________|" << endl;
+	cardtest2_c();
 	cout << "[Press Enter to Exit]";
 	cin.get();
 	return 0;
@@ -885,8 +891,6 @@ void CardTestInitializeGame(gameState * G)
 	int numPlayers = 2;
 	initializeGame(numPlayers, k, seed, G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
 
-	bool allPass = true;
-
 	int player_i = whoseTurn(G);
 	// Add 2 of each kingdom cards to player_i's deck
 	for (int i = 0; i < NUM_KINGDOM_CARDS; i++)
@@ -896,8 +900,75 @@ void CardTestInitializeGame(gameState * G)
 	}
 }
 
-// Smith Card Unit Test
-int cardtest1_c() { return 1; };
+// Smithy Card Unit Test
+//    Smithy card takes 3 cards from the deck and places them in the hand.  No other game states should be effected.
+//		
+//		Testing Plan
+//		T1  Hand card count should increase by 3
+//		T2  Deck card count should decrease by 3.  (becuase initial state has 5 deck cards)
+//		T3  Actions remain the same
+//		T4  Coins remain the same
+//		T5  Buys remain the same 
+//		T6  Played Cards Increases by 1
+//		T7  Total Count of cards remain the same
+int cardtest1_c() {
+	gameState G;
+	CardTestInitializeGame(&G); // initial state + 1 of each of the 5 supply cards in the deck
+	int player_i = whoseTurn(&G);
+
+	// Add Smithy card to the 5th Hand Position
+	G.hand[player_i][G.handCount[player_i]] = smithy; 
+	G.handCount[player_i]++; // hand should have 6 cards at this point
+
+	struct gameState G_original;
+	memcpy(&G_original, &G, sizeof(gameState));
+
+ 	cardEffectSmithy(smithy, -1,  -1,  -1,&G, G.handCount[player_i] -1, 0); // the cardEffect signature is very odd to me... How coins are tracked is odd.
+
+
+	// Smithy effect 
+	bool allPass = true;
+	bool tResult = true;
+
+	//		T1  Hand card count should increase by 3
+	tResult = (G.handCount == G_original.handCount + 3);
+	allPass = allPass && tResult;
+	cout << "T1: Smithy Card Test:" << PASS(tResult) << " Returns true when handCount increases by 3\n";
+
+//		T2  Deck card count should decrease by 3.  (becuase initial state has 5 deck cards)
+	tResult = (G.deckCount == G_original.deckCount - 3);
+	allPass = allPass && tResult;
+	cout << "T2: Smithy Card Test:" << PASS(tResult) << " Returns true when deckCount decreases by 3\n";
+
+//		T3  Actions remain the same
+	tResult = (G.numActions == G_original.numActions);
+	allPass = allPass && tResult;
+	cout << "T3: Smithy Card Test:" << PASS(tResult) << " Returns true when numActions remains the same\n";
+
+//		T4  Coins remain the same
+	tResult = (G.coins == G_original.coins);
+	allPass = allPass && tResult;
+	cout << "T4: Smithy Card Test:" << PASS(tResult) << " Returns true when coins remains the same\n";
+
+//		T5  Buys remain the same 
+	tResult = (G.numBuys== G_original.numBuys);
+	allPass = allPass && tResult;
+	cout << "T5: Smithy Card Test:" << PASS(tResult) << " Returns true when numBuys remains the same\n";
+
+	//		T6  Played Cards Increases by 1
+	tResult = (G.playedCardCount == G_original.playedCardCount+1);
+	allPass = allPass && tResult;
+	cout << "T6: Smithy Card Test:" << PASS(tResult) << " Returns true when playedCardCount increases by 1\n";
+
+	//		T7  Total Count of cards remain the same
+	int cardCountBefore = G.deckCount[player_i] + G.discardCount[player_i] + G.playedCardCount + G.handCount[player_i];
+	int cardCountAfter = G_original.deckCount[player_i] + G_original.discardCount[player_i] + G_original.playedCardCount + G_original.handCount[player_i];
+	tResult = (cardCountBefore == cardCountAfter);
+	allPass = allPass && tResult;
+	cout << "T6: Smithy Card Test:" << PASS(tResult) << " Returns true when Total Cards owned by player remains the same.\n";
+
+	return allPass;
+};
 // Adventurer Car Unit Test
 int cardtest2_c() { return 1; };
 // cutpurse
