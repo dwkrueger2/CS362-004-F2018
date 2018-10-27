@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/CS362-004-F2018/v15/Browse.VC.db
+/.vs/CS362-004-F2018/v15/Browse.VC.opendb
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
