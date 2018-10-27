@@ -75,6 +75,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="..\..\dominion\unittest1.c" />
+    <ClCompile Include="..\..\dominion\unitTestSupport.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rngs.c" />
   </ItemGroup>
