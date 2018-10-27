@@ -754,7 +754,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			return 0;
 		}
 		case gardens:
-			cardEffectGardens(card, choice1, choice2, choice3, state, handPos, bonus);
+			cardEffectGardens( state);
 
 		case mine:
 		{
@@ -1232,10 +1232,12 @@ int cardEffectAdventurer(struct gameState *state) {
 	}
 	return 0;
 }
-int cardEffectGardens(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus) { 
+int cardEffectGardens(struct gameState *state) {
+	int card = gardens;
 	int currentPlayer = whoseTurn(state);
-	drawCard(currentPlayer, state);
-	return -1; }
+	drawCard(currentPlayer, state); // Bug -- Gardens should have no effect until the end game.
+	return -1;
+}
 int cardEffectVillage(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
 	int currentPlayer = whoseTurn(state);
