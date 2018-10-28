@@ -28,17 +28,7 @@ using namespace std;
 #endif // (_WIN32)
 
 
-// Utilities
-#ifdef __linux__  // add tty color codes
-#define mRED "\033[31m"
-#define mGREEN "\033[32m"
-#define mYELLOW "\033[33m"
-#define mBLUE "\033[34m"
-#define mPURPLE "\033[35m"
-#define mCYAN "\033[36m"
-#define mWHITE "\033[37m"
-#define mNONE "\033[0m"
-#endif
+
 
 string PASS(bool pvalue); // returns color coded PASS or FAIL
 
@@ -46,4 +36,5 @@ void percent(int a, int b); // just prints a 2 decimal point number % to stdout
 string getCardName(CARD c);
 string getDeckString(int player_i, gameState * state); // returns a string of the current deck example: "{ copper, province, smithy, adventure }"
 bool isGameStateEqual(gameState * G1, gameState * G2); // a member by member (byte by byte) comparison of items in the gamestate items.  if they are identical in value then true is returned
+void printHeader(string msg); // prints a box with a header 
 #endif // UNITTESTSUPPORT_C

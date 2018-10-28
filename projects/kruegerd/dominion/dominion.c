@@ -1195,7 +1195,7 @@ int cardEffectSmithy(int card, int choice1, int choice2, int choice3, struct gam
 	return 0;
 }
 int cardEffectAdventurer(struct gameState *state) {
-	int card = adventurer;
+	//int card = adventurer;
 	//int i;
 	//int j;
 	//int k;
@@ -1233,7 +1233,7 @@ int cardEffectAdventurer(struct gameState *state) {
 	return 0;
 }
 int cardEffectGardens(struct gameState *state) {
-	int card = gardens;
+	//int card = gardens;
 	int currentPlayer = whoseTurn(state);
 	drawCard(currentPlayer, state); // Bug -- Gardens should have no effect until the end game.
 	return -1;
@@ -1253,7 +1253,7 @@ int cardEffectVillage(int card, int choice1, int choice2, int choice3, struct ga
 	return 0;
 }
 int cardEffectCutPurse( struct gameState *state, int handPos) {
-	int card = cutpurse;
+	//int card = cutpurse;
 	int i;
 	int j;
 	int k;

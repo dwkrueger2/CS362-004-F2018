@@ -16,21 +16,25 @@
 
 
 #include <iostream>
-#include <iomanip>
 #include <string.h>
-#include <fstream>
-#include <stdlib.h>
 #include <stdio.h>
 #include <sstream>
 #include <string>
-#include <time.h>
-#include <ctime>
-#include <climits>
 
 #include "unitTestSupport.h"
 
 using namespace std;
-
+// Utilities
+#ifdef __linux__  // add tty color codes
+#define mRED "\033[31m"
+#define mGREEN "\033[32m"
+#define mYELLOW "\033[33m"
+#define mBLUE "\033[34m"
+#define mPURPLE "\033[35m"
+#define mCYAN "\033[36m"
+#define mWHITE "\033[37m"
+#define mNONE "\033[0m"
+#endif
 
 
 
@@ -61,7 +65,7 @@ string PASS(bool pvalue) {
 	return ""; // already had code written to recieve a string and it kinda still works well (pvalue ? "PASS" : "FAIL");
 }
 #elif __linux__
-string PASS(bool pvalue) { return (pvalue ? mGREEN"PASS"mNONE : mRED"FAIL"mNONE); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
+string PASS(bool pvalue) { return (pvalue ? "\033[32mPASS\033[0m" : "\033[31mFAIL\033[0m"); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
 #endif
 
 
@@ -147,7 +151,7 @@ string getDeckString(int player_i, gameState * state)
 bool isGameStateEqual(gameState * G1, gameState * G2) {
 
 	bool isSame = true;
-	for (int offset = 0; offset < (sizeof(gameState) / sizeof(int)) && isSame; offset++)
+	for (unsigned offset = 0; offset < (sizeof(gameState) / sizeof(int)) && isSame; offset++)
 	{
 		int a = *(((int*)G1) + offset);
 		int b = *(((int*)G2) + offset);
@@ -159,4 +163,28 @@ bool isGameStateEqual(gameState * G1, gameState * G2) {
 	}
 	//G2->playedCardCount++;
 	return isSame;
+}
+
+void printHeader(string msg)
+{ 
+	string l1 = " ________________________________________________________________ \n";
+	string l2 = "|                                                                |\n";
+	string l3 = "|                    XXXXXXXXXXXX                                |\n";
+	string l4 = "|________________________________________________________________|\n";
+	unsigned strLength = l1.length(); 
+	unsigned maxLength = l1.length() - 5;
+	unsigned msgLength = (maxLength < msg.length()) ? maxLength : msg.length();
+	unsigned isOdd = (msgLength % 2); // = 1 if odd
+	unsigned padLeft = strLength / 2 - msgLength / 2 - 2;
+	string  middle = "| ";
+	for (unsigned i = 0; i < padLeft; i++)
+		middle += " ";
+	middle = middle +  msg.substr(0,msgLength);
+	for (unsigned i = 0; i < padLeft - isOdd; i++)
+		middle += " ";
+	middle += " |\n";
+	l3 = middle;
+//	unsigned checkLength = l3.length();
+	cout << l1 << l2 << l3 << l4;
+
 }

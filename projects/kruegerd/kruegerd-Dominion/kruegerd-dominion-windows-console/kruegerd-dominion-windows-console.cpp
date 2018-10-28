@@ -97,45 +97,23 @@ int main(int argc, char ** argv)
 //	return 0;
 	*/
 
-	cout << " ________________________________________________________________ " << endl;
-	cout << "|                                                                |" << endl;
-	cout << "|                     Unit Test 1                                |" << endl;
-	cout << "|________________________________________________________________|" << endl;
+	
+
+	printHeader("Unit Test 1");
 	unittest1_c();
-	cout << " ________________________________________________________________ " << endl;
-	cout << "|                                                                |" << endl;
-	cout << "|                     Unit Test 2                                |" << endl;
-	cout << "|________________________________________________________________|" << endl;
+	printHeader("Unit Test 2");
 	unittest2_c();
-	cout << " ________________________________________________________________ " << endl;
-	cout << "|                                                                |" << endl;
-	cout << "|                     Unit Test 3                                |" << endl;
-	cout << "|________________________________________________________________|" << endl;
+	printHeader("Unit Test 3");
 	unittest3_c();
-	cout << " ________________________________________________________________ " << endl;
-	cout << "|                                                                |" << endl;
-	cout << "|                     Unit Test 4                                |" << endl;
-	cout << "|________________________________________________________________|" << endl;
+	printHeader("Unit Test 4");
 	unittest4_c();
-	cout << " ________________________________________________________________ " << endl;
-	cout << "|                                                                |" << endl;
-	cout << "|                     Card Test 1 - Smithy Test                  |" << endl;
-	cout << "|________________________________________________________________|" << endl;
+	printHeader("Card Test 1 - Smithy Test");
 	cardtest1_c();
-	cout << " ________________________________________________________________ " << endl;
-	cout << "|                                                                |" << endl;
-	cout << "|                     Card Test 2 - Adventurer                   |" << endl;
-	cout << "|________________________________________________________________|" << endl;
+	printHeader("Card Test 2 - Adventurer");
 	cardtest2_c();
-	cout << " ________________________________________________________________ " << endl;
-	cout << "|                                                                |" << endl;
-	cout << "|                     Card Test 3 - CutPurse                     |" << endl;
-	cout << "|________________________________________________________________|" << endl;
+	printHeader("Card Test 3 - CutPurse");
 	cardtest3_c();
-	cout << " ________________________________________________________________ " << endl;
-	cout << "|                                                                |" << endl;
-	cout << "|                     Card Test 4 - Gardens                      |" << endl;
-	cout << "|________________________________________________________________|" << endl;
+	printHeader("Card Test 4 - Gardens");
 	cardtest4_c();
 	cout << "[Press Enter to Exit]";
 	cin.get();
