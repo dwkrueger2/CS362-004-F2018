@@ -133,6 +133,7 @@
     <ClCompile Include="..\dominion\playdom.c" />
     <ClCompile Include="..\dominion\player.c" />
     <ClCompile Include="..\dominion\rngs.c" />
+    <ClCompile Include="..\dominion\testSuite.cpp" />
     <ClCompile Include="..\dominion\unittest1.c" />
     <ClCompile Include="..\dominion\unittest2.c" />
     <ClCompile Include="..\dominion\unittest3.c" />
@@ -142,6 +143,7 @@
   <ItemGroup>
     <None Include="..\dominion\Makefile" />
     <None Include="..\dominion\README.md" />
+    <None Include="..\dominion\unittestresult.out" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

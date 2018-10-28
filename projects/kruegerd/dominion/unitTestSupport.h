@@ -37,4 +37,6 @@ string getCardName(CARD c);
 string getDeckString(int player_i, gameState * state); // returns a string of the current deck example: "{ copper, province, smithy, adventure }"
 bool isGameStateEqual(gameState * G1, gameState * G2); // a member by member (byte by byte) comparison of items in the gamestate items.  if they are identical in value then true is returned
 void printHeader(string msg); // prints a box with a header 
+// Initializes the G to the same initial state for all card tests -- this ended not being used by all tests but some tests use it
+void CardTestInitializeGame(gameState * G);
 #endif // UNITTESTSUPPORT_C

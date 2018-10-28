@@ -758,23 +758,7 @@ int unittest4_c() {
 	return allPass ? 0 : 1;
 }
 
-// Initializes the G to the same initial state for all card tests
-void CardTestInitializeGame(gameState * G)
-{
-	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
-	// TODO:  initializeGame can return -1 if it doesn't initialize.  No provision for this is accounted for - danKrueger
-	int seed = 2;
-	int numPlayers = 2;
-	initializeGame(numPlayers, k, seed, G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
 
-	int player_i = whoseTurn(G);
-	// Add 2 of each kingdom cards to player_i's deck
-	for (int i = 0; i < NUM_KINGDOM_CARDS; i++)
-	{
-		G->deck[player_i][G->deckCount[player_i]++] = k[i]; // should post increment  -- Double Check
-		G->supplyCount[k[i]]--; // reduce supply piles
-	}
-}
 
 // Smithy Card Unit Test
 //    Smithy card takes 3 cards from the deck and places them in the hand.  No other game states should be effected.

@@ -188,3 +188,22 @@ void printHeader(string msg)
 	cout << l1 << l2 << l3 << l4;
 
 }
+
+// Initializes the G to the same initial state for all card tests -- this ended not being used by all tests but some tests use it
+// Initializes the G to the same initial state for all card tests
+void CardTestInitializeGame(gameState * G)
+{
+	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
+	// TODO:  initializeGame can return -1 if it doesn't initialize.  No provision for this is accounted for - danKrueger
+	int seed = 2;
+	int numPlayers = 2;
+	initializeGame(numPlayers, k, seed, G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
+
+	int player_i = whoseTurn(G);
+	// Add 2 of each kingdom cards to player_i's deck
+	for (int i = 0; i < NUM_KINGDOM_CARDS; i++)
+	{
+		G->deck[player_i][G->deckCount[player_i]++] = k[i]; // should post increment  -- Double Check
+		G->supplyCount[k[i]]--; // reduce supply piles
+	}
+}

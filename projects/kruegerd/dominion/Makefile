@@ -1,8 +1,7 @@
 CFLAGS= -Wall -fpic -coverage -lm -std=c++11
 
-
 rngs.o: rngs.h rngs.c
-	gcc -x c++ -c rngs.c -g  $(CFLAGS)
+	gcc -x c++ -c rngs.c -g  $(CFLAGS) 
 
 unitHelper: unitTestSupport.c dominion.o
 	gcc -x c++ -c unitTestSupport.c -g  $(CFLAGS)
@@ -10,38 +9,56 @@ unitHelper: unitTestSupport.c dominion.o
 dominion.o: dominion.h dominion.c rngs.o
 	gcc -x c++ -c dominion.c -g  $(CFLAGS)
 
-unitTest1: dominion.o unittest1.c unitHelper
-	gcc -x c++ -lstdc++ -o unitTest1 -g unittest1.c dominion.c rngs.c unitTestSupport.c $(CFLAGS) # -Wall -fpic -coverage -lm -std=c++11
+unitTest1: dominion.c unittest1.c unitHelper
+#	gcc -x c++ -lstdc++ -o unitTest1 -g unittest1.c dominion.c rngs.c unitTestSupport.c $(CFLAGS) # -Wall -fpic -coverage -lm -std=c++11
+	gcc -x c++ -lstdc++ -c -g unittest1.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 #	g++ -x c++ -lstdc++ -o unitTest1 -g unittest1.c dominion.c rngs.c unitTestSupport.c -lm -std=c++11
 
-playdom: dominion.o playdom.c
-	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
-#To run playdom you need to entere: ./playdom <any integer number> like ./playdom 10*/
-testDrawCard: testDrawCard.c dominion.o rngs.o
-	gcc  -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
+unitTest2: dominion.c unittest2.c unitHelper
+#	gcc -x c++ -lstdc++ -o unitTest2 -g unittest2.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
+	gcc -x c++ -lstdc++ -c -g unittest2.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
+unitTest3: dominion.c unittest3.c unitHelper
+#	gcc -x c++ -lstdc++ -o unitTest3 -g unittest3.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
+	gcc -x c++ -lstdc++ -c -g unittest3.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 
-badTestDrawCard: badTestDrawCard.c dominion.o rngs.o
-	gcc -o badTestDrawCard -g  badTestDrawCard.c dominion.o rngs.o $(CFLAGS)
+unitTest4: dominion.c unittest4.c unitHelper
+#	gcc -x c++ -lstdc++ -o unitTest4 -g unittest4.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
+	gcc -x c++ -lstdc++ -c -g unittest4.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 
-testBuyCard: testDrawCard.c dominion.o rngs.o
-	gcc -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
+cardTest1: dominion.c cardtest1.c unitHelper
+	gcc -x c++ -lstdc++ -c -g cardtest1.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
+#	gcc -x c++ -lstdc++ -o cardTest1 -g cardtest1.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 
-testAll: dominion.o testSuite.c
-	gcc -o testSuite testSuite.c -g  dominion.o rngs.o $(CFLAGS)
+cardTest2: dominion.c cardtest2.c unitHelper
+#	gcc -x c++ -lstdc++ -o cardTest2 -g cardtest2.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
+	gcc -x c++ -lstdc++ -c -g cardtest2.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 
-interface.o: interface.h interface.c
-	gcc -c interface.c -g  $(CFLAGS)
+cardTest3: dominion.c cardtest3.c unitHelper
+	gcc -x c++ -lstdc++ -c -g cardtest3.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 
-runtests: testDrawCard 
-	./testDrawCard &> unittestresult.out
+cardTest4: dominion.c cardtest4.c unitHelper
+	gcc -x c++ -lstdc++ -c -g cardtest4.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
+
+testSuite: dominion.o unitTest1 unitTest2 unitTest3 unitTest4 cardTest1 cardTest2 cardTest3 cardTest4
+	gcc -x c++ -lstdc++ -o testSuite -g testSuite.cpp unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c  cardtest2.c  cardtest3.c cardtest4.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11
+
+testAll: testSuite
+	./testSuite &> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
+	
 
 
-player: player.c interface.o
-	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
+#runtests: testDrawCard 
+#	./testDrawCard &> unittestresult.out
+#	gcov dominion.c >> unittestresult.out
+#	cat dominion.c.gcov >> unittestresult.out
 
-all: playdom player 
+
+#player: player.c interface.o
+#	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
+
+#all: playdom player 
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe unitTest[1-4] cardTest[1-4] testSuite

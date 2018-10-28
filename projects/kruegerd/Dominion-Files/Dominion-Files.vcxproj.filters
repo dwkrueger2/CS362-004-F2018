@@ -74,9 +74,13 @@
     <ClCompile Include="..\dominion\unittest4.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\dominion\testSuite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\dominion\Makefile" />
     <None Include="..\dominion\README.md" />
+    <None Include="..\dominion\unittestresult.out" />
   </ItemGroup>
 </Project>
