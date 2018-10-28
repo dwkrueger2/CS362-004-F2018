@@ -1,17 +1,17 @@
 CFLAGS= -Wall -fpic -coverage -lm -std=c++11
 
-unitTest1: dominion.o unittest1.c unitHelper
-	gcc -o unitTest1 -g unitTestSupport.o dominion.o $(CFLAGS)
 
 rngs.o: rngs.h rngs.c
-	gcc -c rngs.c -g  $(CFLAGS)
+	gcc -x c++ -c rngs.c -g  $(CFLAGS)
 
-unitHelper: unitTestSupport.c
+unitHelper: unitTestSupport.c dominion.o
 	gcc -x c++ -c unitTestSupport.c -g  $(CFLAGS)
 
 dominion.o: dominion.h dominion.c rngs.o
 	gcc -x c++ -c dominion.c -g  $(CFLAGS)
 
+unitTest1: dominion.o unittest1.c unitHelper
+	gcc -x c++ -o unitTest1 -g unittest1.cunitTestSupport.o dominion.o rngs.o $(CFLAGS)
 
 
 playdom: dominion.o playdom.c
