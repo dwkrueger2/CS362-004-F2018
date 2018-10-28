@@ -36,7 +36,7 @@ using namespace std;
 #define mNONE "\033[0m"
 #endif
 
-
+#define USE_COLOR 1
 
 #ifdef _WIN32  // Windows and Linux require different implementations for color coding text on the console screen
 string PASS(bool pvalue) {
@@ -65,7 +65,11 @@ string PASS(bool pvalue) {
 	return ""; // already had code written to recieve a string and it kinda still works well (pvalue ? "PASS" : "FAIL");
 }
 #elif __linux__
-string PASS(bool pvalue) { return (pvalue ? "\033[32mPASS\033[0m" : "\033[31mFAIL\033[0m"); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
+	#if (USE_COLOR)
+		string PASS(bool pvalue) { return (pvalue ? "\033[32mPASS\033[0m" : "\033[31mFAIL\033[0m"); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
+	#else
+		string PASS(bool pvalue) { return (pvalue ? "PASS" : "FAIL"); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
+	#endif
 #endif
 
 

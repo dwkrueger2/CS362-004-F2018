@@ -81,7 +81,7 @@ int unittest4_c() {
 	G.supplyCount[smithy] = 0;
 	tResult = (1 == isGameOver(&G));
 	allPass = allPass && tResult;
-	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns True when Estate,Duchy, & Smithy Supply = 0\n";
+	cout << "T3: isGameOver(gameState):" << PASS(tResult) << " Returns True when Estate,Duchy, & Smithy Supply = 0\n";
 
 
 	//	4) T4 - Reset smithy != 0 and Curse = 0 expect true to game over
@@ -91,7 +91,7 @@ int unittest4_c() {
 	G.supplyCount[curse] = 0;
 	tResult = (1 == isGameOver(&G));
 	allPass = allPass && tResult;
-	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns True when Estate,Duchy, & Curse Supply = 0\n";
+	cout << "T4: isGameOver(gameState):" << PASS(tResult) << " Returns True when Estate,Duchy, & Curse Supply = 0\n";
 
 	//			5) T5 - Reset Estate, Dutchy != 0 and set 3 kingdom cards to 0 expect true to game over
 	G.supplyCount[duchy] = 6;
@@ -101,14 +101,14 @@ int unittest4_c() {
 	G.supplyCount[cutpurse] = 0;
 	tResult = (1 == isGameOver(&G));
 	allPass = allPass && tResult;
-	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns True when smithy, adventurer, cutpurse Supply = 0\n";
+	cout << "T5: isGameOver(gameState):" << PASS(tResult) << " Returns True when smithy, adventurer, cutpurse Supply = 0\n";
 
 	// T6 - Set all 5 Kigdom cards = 0 expect true to game over
 	G.supplyCount[gardens] = 0;
 	G.supplyCount[village] = 0;
 	tResult = (1 == isGameOver(&G));
 	allPass = allPass && tResult;
-	cout << "T1: isGameOver(gameState):" << PASS(tResult) << " Returns True when smithy, adventurer, cutpurse, gardens, village Supply = 0\n";
+	cout << "T6: isGameOver(gameState):" << PASS(tResult) << " Returns True when smithy, adventurer, cutpurse, gardens, village Supply = 0\n";
 
 	cout << "endTurn(gameState): Unit Tests 4 - all tests:" << PASS(allPass) << endl;
 	//return (allPass ? 0 : 1);

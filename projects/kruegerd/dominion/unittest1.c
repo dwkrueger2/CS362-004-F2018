@@ -47,6 +47,7 @@
 #include "rngs.h"
 #endif
 
+// testing shuffle
 int unittest1_c() {
 //	int main ()
 	//{
