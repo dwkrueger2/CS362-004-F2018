@@ -16,19 +16,20 @@
 //			The total number of cards in player's hands should not be affected.
 //					before shuffled deckCount[player[i] = 0
 //			Therefore deckCount[player[i]]	 
-
+//
+//  Note when compiling on the school server the default gcc options for the compiler include the following:
+//		1) .c files use c copiler use  -x c++ option to force c++
+//		2) -lm  links the math library
+//		3) g++ links stdlibrary by default but needs explicit linking  https://stackoverflow.com/questions/28236870/undefined-reference-to-stdcout
+//				use -lstdc++
+//  Valid Compile Command:  gcc -x c++ -lstdc++ -o unitTest1 -g unittest1.c dominion.c rngs.c unitTestSupport.c -lm -std=c++11
 
 #include <iostream>
-#include <iomanip>
 #include <string.h>
-#include <fstream>
 #include <stdlib.h>
-#include <stdio.h>
+//#include <stdio.h>
 #include <sstream>
 #include <string>
-#include <time.h>
-#include <ctime>
-#include <climits>
 #include "unitTestSupport.h"
 
 #ifdef _WIN32

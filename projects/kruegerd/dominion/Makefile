@@ -11,8 +11,8 @@ dominion.o: dominion.h dominion.c rngs.o
 	gcc -x c++ -c dominion.c -g  $(CFLAGS)
 
 unitTest1: dominion.o unittest1.c unitHelper
-	gcc -x c++ -o unitTest1 -g unittest1.cunitTestSupport.o dominion.o rngs.o $(CFLAGS)
-
+	gcc -x c++ -lstdc++ -o unitTest1 -g unittest1.c dominion.c rngs.c unitTestSupport.c $(CFLAGS) # -Wall -fpic -coverage -lm -std=c++11
+#	g++ -x c++ -lstdc++ -o unitTest1 -g unittest1.c dominion.c rngs.c unitTestSupport.c -lm -std=c++11
 
 playdom: dominion.o playdom.c
 	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
