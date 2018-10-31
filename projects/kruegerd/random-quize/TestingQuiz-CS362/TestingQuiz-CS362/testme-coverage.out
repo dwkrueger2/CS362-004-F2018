@@ -1,0 +1,226 @@
+File 'testme.c'
+Lines executed:94.29% of 70
+Creating 'testme.c.gcov'
+
+File '/usr/include/c++/4.8.2/iostream'
+Lines executed:100.00% of 1
+Creating 'iostream.gcov'
+
+File '/usr/include/c++/4.8.2/bits/basic_ios.h'
+Lines executed:0.00% of 4
+Creating 'basic_ios.h.gcov'
+
+File '/usr/include/c++/4.8.2/ext/new_allocator.h'
+Lines executed:0.00% of 3
+Creating 'new_allocator.h.gcov'
+
+File '/usr/include/c++/4.8.2/bits/basic_string.h'
+Lines executed:0.00% of 1
+Creating 'basic_string.h.gcov'
+
+File '/usr/include/c++/4.8.2/ostream'
+No executable lines
+Removing 'ostream.gcov'
+
+File '/usr/include/c++/4.8.2/bits/allocator.h'
+No executable lines
+Removing 'allocator.h.gcov'
+
+File '/usr/include/c++/4.8.2/bits/locale_facets.h'
+Lines executed:0.00% of 5
+Creating 'locale_facets.h.gcov'
+
+File '/usr/include/c++/4.8.2/bits/ios_base.h'
+Lines executed:0.00% of 2
+Creating 'ios_base.h.gcov'
+
+File '/usr/include/c++/4.8.2/ext/atomicity.h'
+Lines executed:0.00% of 10
+Creating 'atomicity.h.gcov'
+
+File '/usr/include/c++/4.8.2/x86_64-redhat-linux/bits/gthr-default.h'
+Lines executed:0.00% of 2
+Creating 'gthr-default.h.gcov'
+
+File '/usr/include/c++/4.8.2/bits/char_traits.h'
+Lines executed:0.00% of 2
+Creating 'char_traits.h.gcov'
+
+        -:    0:Source:testme.c
+        -:    0:Graph:testme.gcno
+        -:    0:Data:testme.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:
+        -:    2:#include<stdio.h>
+        -:    3:#include<string.h>
+        -:    4:#include<stdlib.h>
+        -:    5:#include<time.h>
+        -:    6:#include<iostream>
+        -:    7:
+        -:    8:#ifdef _WIN32
+        -:    9:	#include <Windows.h>
+        -:   10:#define _CRT_SECURE_NO_WARNINGS
+        -:   11:#endif
+        -:   12:using namespace std;
+        -:   13:string PASS(bool pvalue); // A utility function to print PASS or FAIL based on pvalue;
+   184868:   14:char inputChar() // Range ' ' to '~' utilized.
+        -:   15:{
+        -:   16:	// TODO: rewrite this function
+   184868:   17:	int r = rand() % ((int)'~' - ' '+1);
+   184868:   18:	char s = (char)(r + ' ');
+   184868:   19:	return s;
+        -:   20:}
+   874340:   21:char inputChar2() // Range 'a'-'z' utilized.
+        -:   22:{
+        -:   23:	
+   874340:   24:	int r = rand() % ((int)'a' - 'z' + 1);
+   874340:   25:	char s = (char)(r + 'a');
+   874340:   26:	return s;
+        -:   27:}
+   174868:   28:char *inputString()
+        -:   29:{
+        -:   30:	// TODO: rewrite this function
+        -:   31:	 //char s1[6] = "reset";
+        -:   32:	 //char * s1 = new char[6];
+   174868:   33:	char * s1 = (char *)malloc(sizeof(char) * 6);
+  1224076:   34:	for (int i = 0; i < 6; i++)
+  1049208:   35:		s1[i] = '\0';
+   174868:   36:	int size = strlen("reset");
+  1049208:   37:	for (int i = 0; i < size; i++)
+        -:   38:	{
+   874340:   39:		s1[i] = inputChar2();
+   874340:   40:		if (s1[i] < 'a' || s1[i] > 'z')
+    #####:   41:			cout << "Error from inputChar2: out of range character: " << s1[i] << ": value: " << (int)s1[i] << endl;
+        -:   42:	}
+        -:   43:
+   174868:   44:	return s1;
+        -:   45:}
+        1:   46: void testme()
+        -:   47: {
+        1:   48:	 int tcCount = 0;
+        1:   49:	 char s[8] = { '\0' };
+        -:   50:	 char c;
+        1:   51:	 int state = 0;
+        -:   52:	 while (1)
+        -:   53:	 {
+   174868:   54:		 tcCount++;
+   174868:   55:		 c = inputChar();
+        -:   56:	/* #ifdef __linux__
+        -:   57:		 
+        -:   58:		 strcpy(s, inputString());
+        -:   59:	 #elif _WIN32*/
+   174868:   60:		 char * a = inputString();
+  1224076:   61:		 for (int i = 0; i < 6; i++)
+  1049208:   62:			 s[i] = a[i]; 
+        -:   63:	 //#endif
+        -:   64:		 //s = inputString();
+        -:   65:		 printf("Iteration %d: c = %c, s = %s, state = %d\n", tcCount, c, s,
+   174868:   66:			 state);
+   174868:   67:		 if (c == '[' && state == 0) state = 1;
+   174868:   68:		 if (c == '(' && state == 1) state = 2;
+   174868:   69:		 if (c == '{' && state == 2) state = 3;
+   174868:   70:		 if (c == ' '&& state == 3) state = 4;
+   174868:   71:		 if (c == 'a' && state == 4) state = 5;
+   174868:   72:		 if (c == 'x' && state == 5) state = 6;
+   174868:   73:		 if (c == '}' && state == 6) state = 7;
+   174868:   74:		 if (c == ')' && state == 7) state = 8;
+   174868:   75:		 if (c == ']' && state == 8) state = 9;
+   174868:   76:		 if (state == 9)
+        -:   77:	//		 cout << "State 9 hit on iteration: " << tcCount << endl;
+   173955:   78:		 if (s[0] == 'r' && s[1] == 'e'
+      285:   79:			 && s[2] == 's' && s[3] == 'e'
+        1:   80:			 && s[4] == 't' && s[5] == '\0'
+        1:   81:			 && state == 9)
+        -:   82:		 {
+        1:   83:			 printf("error ");
+        1:   84:			 exit(200);
+        -:   85:		 }
+        -:   86:		// delete(a);
+   174867:   87:		 free(a);
+   174867:   88:	 }
+        -:   89: }
+        -:   90:
+        1:   91: bool testInputCharacter()
+        -:   92: {
+        -:   93:
+        1:   94:	 int s[95] = { 0 };
+        -:   95:	// cout << "Range :" << ((int)'~' - (int)' ') << endl;
+        1:   96:	 int maxNumIterations = 10000;
+        1:   97:	 bool generatedAllCharacters = true;
+    10001:   98:	 for (int i = 0; i < maxNumIterations; i++)
+        -:   99:	 {
+    10000:  100:		 generatedAllCharacters = true;
+    10000:  101:		 char s1 = inputChar();
+        -:  102:		 //s1 = '~';
+        -:  103:		// cout << s1 << ": " << ((int)s1) << endl;
+    10000:  104:		 int index = (int)s1 - (int)' ';
+    10000:  105:		 if (index < 0 || index >= 95)
+    #####:  106:			 cout << "Error 1: Index Out of Range\n";
+    10000:  107:		 if (s1 < ' ' && s1 > '~')
+    #####:  108:			 cout << "Error 2: Character out of Range\n";
+    10000:  109:		 if (s[index] != 1)
+       95:  110:			 s[index] = 1;
+   960000:  111:		 for (int j = 0; j < 95; j++)
+   950000:  112:			 generatedAllCharacters = generatedAllCharacters && (s[j] == 1) && (s1 >= ' ' && s1 <= '~');
+        -:  113:		 if (generatedAllCharacters)
+        -:  114:		 {
+        -:  115:			// cout << ": All 100 characters hit on the " << i << "th iteration\n";
+        -:  116:			 //i = maxNumIterations;
+        -:  117:		 }
+        -:  118:		/* if (i % 100 == 0)
+        -:  119:			 cout << "100::::\n";*/
+        -:  120:	 }
+        1:  121:	 return generatedAllCharacters;
+        -:  122: }
+        -:  123:
+        1:  124:int main(int argc, char *argv[])
+        -:  125:{
+        1:  126:	srand(time(NULL));
+        1:  127:	cout << "Testing inputChar() generates all 94 characters from ' ' to '~'.\n";
+        -:  128:#ifdef _WIN32
+        -:  129:	PASS(testInputCharacter());
+        -:  130:#endif
+        -:  131:#ifdef __linux__
+        1:  132:	cout << PASS(testInputCharacter()) << endl;
+        -:  133:#endif
+        -:  134:
+        -:  135:
+        1:  136:	testme();
+    #####:  137:	return 0;
+        -:  138:}
+        -:  139:
+        -:  140:#ifdef _WIN32  // Windows and Linux require different implementations for color coding text on the console screen
+        -:  141:string PASS(bool pvalue) {
+        -:  142:	HANDLE  hConsole;
+        -:  143:	_CONSOLE_SCREEN_BUFFER_INFO  currentConsoleState;
+        -:  144:	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        -:  145:	GetConsoleScreenBufferInfo(hConsole, &currentConsoleState);
+        -:  146:	cout.flush();
+        -:  147:	// Print sample colors
+        -:  148:	//for (int i = 0; i < 32; i++) {
+        -:  149:	//	SetConsoleTextAttribute(hConsole, i); // Fail is 12-red on black // Succes is 10 - Green on Black
+        -:  150:	//	cout << "Color Number: " << i << endl;
+        -:  151:	//}
+        -:  152:	if (pvalue)
+        -:  153:	{
+        -:  154:		SetConsoleTextAttribute(hConsole, 10); // Fail is 12-red on black // Succes is 10 - Green on Black
+        -:  155:		cout << "PASS ";
+        -:  156:	}
+        -:  157:	else {
+        -:  158:		SetConsoleTextAttribute(hConsole, 12); // Fail is 12-red on black // Succes is 10 - Green on Black
+        -:  159:		cout << "FAIL ";
+        -:  160:	}
+        -:  161:	// return console text to previous color
+        -:  162:	SetConsoleTextAttribute(hConsole, currentConsoleState.wAttributes); // return display state
+        -:  163:	cout.flush();
+        -:  164:	return ""; // already had code written to recieve a string and it kinda still works well (pvalue ? "PASS" : "FAIL");
+        -:  165:}
+        -:  166:
+        -:  167:#elif __linux__
+        -:  168:#if (USE_COLOR)
+        -:  169:string PASS(bool pvalue) { return (pvalue ? "\033[32mPASS\033[0m" : "\033[31mFAIL\033[0m"); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
+        -:  170:#else
+        4:  171:string PASS(bool pvalue) { return (pvalue ? "PASS" : "FAIL"); } // note this is a c-preprocessor concationation trick... Not exactly intuitive https://stackoverflow.com/questions/12958925/expand-macros-inside-quoted-string
+        -:  172:#endif
+        -:  173:#endif
