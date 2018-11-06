@@ -36,3 +36,14 @@
 /projects/kruegerd/kruegerd-Dominion/rngs_c/Debug/rngs_c.tlog/CL.command.1.tlog
 /projects/kruegerd/kruegerd-Dominion/rngs_c/Debug/rngs_c.pdb
 /projects/kruegerd/kruegerd-Dominion/rngs_c/Debug/vc141.pdb
+*.db
+*.opendb
+*.ipch
+*.suo
+*.exe
+*.tlog
+*.ilk
+*.pdb
+*.enc
+/projects/kruegerd/random-quize/TestingQuiz-CS362/TestingQuiz-CS362/pch.cpp
+/projects/kruegerd/random-quize/TestingQuiz-CS362/TestingQuiz-CS362/pch.h
