@@ -3,14 +3,22 @@
 #include "rngs.h"
 #include <stdlib.h>
 
+
+
 int main (int argc, char** argv) {
   struct gameState G;
-  int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
-           sea_hag, tribute, smithy};
 
+	// k is the cards passed to the initialize game.  10 was hard coded
+	// original 
+  /*int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
+           sea_hag, tribute, smithy};
+*/
+	
+	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
   printf ("Starting game.\n");
 
-  initializeGame(2, k, atoi(argv[1]), &G);
+	// TODO:  initializeGame can return -1 if it doesn't initialize.  No provision for this is accounted for - danKrueger
+  initializeGame(2, k, atoi(argv[1]), &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
 
   int money = 0;
   int smithyPos = -1;
@@ -82,7 +90,7 @@ int main (int argc, char** argv) {
       printf("0: end turn\n");
       endTurn(&G);
     }
-    else {
+    else { // other player's turn (not player 0)
       if (adventurerPos != -1) {
         printf("1: adventurer played from position %d\n", adventurerPos);
         playCard(adventurerPos, -1, -1, -1, &G);
