@@ -26,6 +26,7 @@ public class UrlValidatorTest extends TestCase {
 
    private final boolean printStatus = false;
    private final boolean printIndex = false;//print index that indicates current scheme,host,port,path, query test were using.
+   int numberOfTestCalls = 0;
 
    public UrlValidatorTest(String testName) {
       super(testName);
@@ -100,7 +101,8 @@ protected void setUp() {
             expected &= part[index].valid;
          }
          String url = testBuffer.toString();
-         boolean result = urlVal.isValid(url);
+         boolean result = urlVal.isValid(url); numberOfTestCalls++; // keeping track of the number times it is called
+         
          if(result == true)
         	 System.out.println(url);
          assertEquals(url, expected, result);
@@ -124,6 +126,7 @@ protected void setUp() {
       if (printStatus) {
          System.out.println();
       }
+      System.out.println("urlVal.isValid(url) is called: " + numberOfTestCalls + " times\n");
    }
 
    public void testValidator202() {

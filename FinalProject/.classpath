@@ -3,7 +3,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="URLValidatorCorrect/src"/>
 	<classpathentry kind="src" path="URLValidatorCorrect/test"/>
-	<classpathentry kind="src" path="URLValidatorInCorrect/src"/>
-	<classpathentry kind="src" path="URLValidatorInCorrect/test"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/Source/Repos/CS362-004-F2018/FinalProject/JUNIT/hamcrest-all-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/Source/Repos/CS362-004-F2018/FinalProject/JUNIT/junit-4.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
