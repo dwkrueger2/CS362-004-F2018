@@ -14,7 +14,7 @@ int compare(const void* a, const void* b) {
 }
 
 struct gameState* newGame() {
-  struct gameState* g = malloc(sizeof(struct gameState));
+  struct gameState* g =(gameState*) malloc(sizeof(struct gameState));
   return g;
 }
 
@@ -672,7 +672,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	switch (card)
 	{
 		case adventurer:
-			cardEffectAdventurer(card, choice1, choice2, choice3, state, handPos, bonus);
+			cardEffectAdventurer(state);
 
 		case council_room:
 		{
@@ -754,7 +754,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			return 0;
 		}
 		case gardens:
-			cardEffectGardens(card, choice1, choice2, choice3, state, handPos, bonus);
+			cardEffectGardens(state);
 
 		case mine:
 		{
@@ -821,7 +821,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		}
 
 		case smithy:
-			cardEffectSmithy(card, choice1, choice2, choice3, state, handPos, bonus);
+			cardEffectSmithy(state, handPos);
 
 		case village:
 			cardEffectVillage(card, choice1, choice2, choice3, state, handPos, bonus);
@@ -1086,7 +1086,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			return 0;
 		}
 		case cutpurse:
-			cardEffectCutPurse(card, choice1, choice2, choice3, state, handPos, bonus);
+			cardEffectCutPurse(state, handPos);
 
 
 		case embargo:
@@ -1181,7 +1181,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	return -1;
 }
 
-int cardEffectSmithy(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus){
+int cardEffectSmithy(struct gameState *state, int handPos){
 	int currentPlayer = whoseTurn(state);
 	int i;
 	//+3 Cards
@@ -1194,7 +1194,7 @@ int cardEffectSmithy(int card, int choice1, int choice2, int choice3, struct gam
 	discardCard(handPos, currentPlayer, state, 0);
 	return 0;
 }
-int cardEffectAdventurer(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus) {
+int cardEffectAdventurer( struct gameState *state) {
 	//int i;
 	//int j;
 	//int k;
@@ -1231,7 +1231,7 @@ int cardEffectAdventurer(int card, int choice1, int choice2, int choice3, struct
 	}
 	return 0;
 }
-int cardEffectGardens(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus) { 
+int cardEffectGardens( struct gameState *state) { 
 	int currentPlayer = whoseTurn(state);
 	drawCard(currentPlayer, state);
 	return -1; }
@@ -1249,7 +1249,7 @@ int cardEffectVillage(int card, int choice1, int choice2, int choice3, struct ga
 	discardCard(handPos, currentPlayer, state, 0);
 	return 0;
 }
-int cardEffectCutPurse(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus) {
+int cardEffectCutPurse(struct gameState *state, int handPos) { // left handPos because it's related to the bug
 	int i;
 	int j;
 	int k;
