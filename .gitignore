@@ -2,3 +2,13 @@
 *.db
 *.opendb
 *.ipch
+*.lastbuildstate
+*.tlog
+*.obj
+*.enc
+*.pch
+*.idb
+*.pdb
+*.ilk
+*.exe
+*.log
