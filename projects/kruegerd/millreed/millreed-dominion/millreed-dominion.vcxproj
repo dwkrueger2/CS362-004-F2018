@@ -160,12 +160,21 @@
     <ClInclude Include="unitTestSupport.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="assignment5-millreed-randomtests.cpp" />
     <ClCompile Include="dominion.c" />
     <ClCompile Include="interface.c" />
-    <ClCompile Include="millreed-dominion.cpp" />
-    <ClCompile Include="playdom.c" />
-    <ClCompile Include="player.c" />
-    <ClCompile Include="randomtestcard1.c" />
+    <ClCompile Include="playdom.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="player.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="randomtestcard1.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="randomtestcard2.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="rngs.c" />
     <ClCompile Include="unitTestSupport.c" />
   </ItemGroup>
