@@ -12,11 +12,17 @@ unitHelper: unitTestSupport.c dominion.o
 dominion.o: dominion.h dominion.c rngs.o
 	gcc -x c++ -c dominion.c -g  $(CFLAGS)
 
+#unitTest1 is the cutpurse test  It is not included in the full test suite
+unitTest1: dominion.c unitTest1-cutpurse.c unitHelper
+	gcc -x c++ -o unitTest1 -g unitTest1-cutpurse.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+
+#randomtestcard1 is the cutpurse code
 cardTest1: dominion.c randomtestcard1.c unitHelper
 	#gcc -x c++ -lstdc++ -o cardTest1 -c -g randomtestcard1.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 	#gcc -x c++ -o cardTest1 -g randomtestcard1.c dominion.c rngs.c unitTestSupport.c  -lstdc++ $(CFLAGS)
 	gcc -x c++ -o cardTest1 -g randomtestcard1.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 
+#randomtestcard2 is the smithycode
 cardTest2: dominion.c randomtestcard2.c unitHelper
 	gcc -x c++ -o cardTest2 -g randomtestcard2.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 

@@ -67,14 +67,15 @@ int gameStateRandomizer(gameState * G, int challengCard);
 #define NUM_TESTS_TO_RUN 5000
 #define VERBOSE true
 #define EXAMPLE_TEST_COUNT 5
-//#define RUN_SMITHY
-#define RUN_CUTPURSE
+#define RUN_SMITHY
+//#define RUN_CUTPURSE
 //#define RUN_ADVENTURE
 
 #if defined (RUN_SMITHY)
 #define PRINTHEADER printHeader("Running Random Card Test 1 - Smithy");
 #define RANDOMIZER gameStateRandomizer(&G,smithy);
-#define CARD_EFFECT cardEffectSmithy(&G, cardPosition);
+//#define CARD_EFFECT cardEffectSmithy(&G, cardPosition); // my signature
+#define CARD_EFFECT smithy_card(G.whoseTurn, &G , cardPosition); // Reed Millers card effect function
 #define RUNNINGTEST SmithyCardTest(&G_original, &G, verbose);
 #elif defined(RUN_CUTPURSE)
 #define PRINTHEADER printHeader("Running Random Card Test 2 - Cutpurse");	
@@ -89,9 +90,14 @@ int gameStateRandomizer(gameState * G, int challengCard);
 #define RUNNINGTEST AdventurerCardTest(&G_original, &G, verbose);
 #endif
 #define PRINT_TAIL_HEADER printHeader("CodeCoverage Information to Follow");
-int main()
-{
-	srand(time(0)); //rngs.c was just not very clear on why and how it is to be used.
+#define USE_AS_FUNCTION 0 // 0 true 1 false
+#if USE_AS_FUNCTION
+int mainRandomTests() {
+#else
+int main() {
+#endif
+	unsigned t1 = (unsigned) time(0);
+	srand(t1); //rngs.c was just not very clear on why and how it is to be used.
 	/*for (int i = 0; i < 50; i++)
 		cout << "\ti: " << floor(rand()%100);
 	return 1;
@@ -100,9 +106,11 @@ int main()
 	int * results;
 	int pass = 0, fail = 1;
 	bool verbose = VERBOSE;
+	int cardPosition = 0; // required  for SMITHY
+	int scratch = 0;  scratch = cardPosition; cardPosition = scratch; // this is hear to get past annoying unused assignment warning
 	gameState G;
 	struct gameState G_original;
-	int cardPosition = 0; // the card poisiton the challeng card will be played from 
+	//int cardPosition = 0; // the card poisiton the challeng card will be played from 
 	PRINTHEADER
 		cout << "Running " << NUM_TESTS_TO_RUN << " tests.  Showing only " << EXAMPLE_TEST_COUNT << " of " << NUM_TESTS_TO_RUN << endl;
 	for (int i = 0; i < NUM_TESTS_TO_RUN; i++)
@@ -115,7 +123,8 @@ int main()
 		cardPosition = RANDOMIZER; // puts challenge card in cardPosition and makes random deck
 		// testing the rand generator		//cout <<"smithy pos: " << cardPosition<<":" <<  getHandString(0, &G)<< endl;
 		memcpy(&G_original, &G, sizeof(gameState));
-		CARD_EFFECT
+		smithy_card(G.whoseTurn, &G, cardPosition);
+		//CARD_EFFECT
 
 			//results = SmithyCardTest(&G_original, &G, true);
 			results = RUNNINGTEST;
@@ -136,6 +145,7 @@ int main()
 	//
 	cout << "--End of Tests--" << endl;
 	PRINT_TAIL_HEADER
+		return 0;
 }
 
 

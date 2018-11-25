@@ -215,7 +215,7 @@ int shuffle(int player, struct gameState *state) {
 	/* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
 
 	while (state->deckCount[player] > 0) {
-		card = floor(Random() * state->deckCount[player]);
+		card = (int) floor(Random() * state->deckCount[player]);
 		newDeck[newDeckPos] = state->deck[player][card];
 		newDeckPos++;
 		for (i = card; i < state->deckCount[player] - 1; i++) {
@@ -1153,7 +1153,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 					{
 						if (state->hand[i][j] == copper)
 						{
-						#ifdef USE_CORRECTED_VERSION   // surrounds areas where bugs are corrected
+							#if USE_CORRECTED_VERSION   // surrounds areas where bugs are corrected
 							// move player i's j'th card to their discard stack
 							state->discard[i][state->discardCount[i]] = state->hand[i][j];
 							state->discardCount[i]++;
