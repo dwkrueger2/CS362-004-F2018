@@ -17,6 +17,7 @@
 #define NUM_KINGDOM_CARDS 5  // the number of cards the players can draw from and put in their hands. (AKA Supply Pile Kindom Cards)
 
 #define DEBUG 0
+ 
 
 /* http://dominion.diehrstraits.com has card texts */
 /* http://dominion.isotropic.org has other stuff */
