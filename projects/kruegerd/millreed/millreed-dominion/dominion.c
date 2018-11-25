@@ -57,9 +57,9 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 	state->numPlayers = numPlayers;
 
 	//check selected kingdom cards are different
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < NUM_KINGDOM_CARDS; i++)
 	{
-		for (j = 0; j < 10; j++)
+		for (j = 0; j < NUM_KINGDOM_CARDS; j++)
 		{
 			if (j != i && kingdomCards[j] == kingdomCards[i])
 			{
