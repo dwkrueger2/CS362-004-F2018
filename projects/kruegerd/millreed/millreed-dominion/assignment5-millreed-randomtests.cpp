@@ -225,13 +225,14 @@ int * CutPurseCardTest(gameState * beforeTest, gameState * afterTest, bool verbo
 		allPass = allPass && tResult;
 		if (verbose) cout << "T1: CutPurse Card Test:" << PASS(tResult) << " Player 1's handCount reduces by 1\n";
 
-		tResult = (G.discardCount[0] == (G_original.discardCount[0] - 1));
+		tResult = (G.discardCount[0] == (G_original.discardCount[0]));
 		if (tResult) counter[pass]++; else counter[fail]++;
 		allPass = allPass && tResult;
-		if (verbose) cout << "T2: CutPurse Card Test:" << PASS(tResult) << " Player 1's discardCount reduces by 1\n";
+		if (verbose) cout << "T2: CutPurse Card Test:" << PASS(tResult) << " Player 1's discardCount stays the same\n";
 
 		// Total Card Test for Player 1
-		tResult = (G.handCount[0] + G.deckCount[0] + G.discardCount[0]) == (G_original.handCount[0] + G_original.deckCount[0] + G_original.discardCount[0]);
+		tResult = (G.handCount[0] + G.deckCount[0] + G.discardCount[0] + G.playedCardCount) 
+			== (G_original.handCount[0] + G_original.deckCount[0] + G_original.discardCount[0] + G_original.playedCardCount);
 		if (tResult) counter[pass]++; else counter[fail]++;
 		allPass = allPass && tResult;
 		if (verbose) cout << "T3: CutPurse Card Test:" << PASS(tResult) << " Player 1's total card count remains the same.\n";
@@ -239,15 +240,28 @@ int * CutPurseCardTest(gameState * beforeTest, gameState * afterTest, bool verbo
 	// Player 2 .. hand reduces by 1 / Discard + 1
 	{// Player 2
 // Player 2 .. hand reduces by 1 / Discard + 1
-		tResult = (G.handCount[1] == (G_original.handCount[1] - 1));
+		bool hasCopper = false;
+		for (int m = 0; m < G_original.handCount[1] ; m++)
+			if (G_original.hand[1][m] == copper)
+			{
+				m = G_original.handCount[1]; // a copper is found
+				hasCopper = true;
+			}
+		if (hasCopper)
+			tResult = (G.handCount[1] == (G_original.handCount[1] - 1)); // handcount decreases
+		else
+			tResult = (G.handCount[1] == (G_original.handCount[1])); // handcount stays the same
 		if (tResult) counter[pass]++; else counter[fail]++;
 		allPass = allPass && tResult;
-		if (verbose) cout << "T4: CutPurse Card Test:" << PASS(tResult) << " Player 2's handCount reduces by 1\n";
+		if (verbose) cout << "T4: CutPurse Card Test:" << PASS(tResult) << " Player 2's handCount reduces by 1 if copper present\n";
 
-		tResult = (G.discardCount[1] == (G_original.discardCount[1] - 1));
+		if (hasCopper)
+			tResult = (G.discardCount[1] == (G_original.discardCount[1] + 1));
+		else
+			tResult = (G.discardCount[1] == (G_original.discardCount[1]));
 		if (tResult) counter[pass]++; else counter[fail]++;
 		allPass = allPass && tResult;
-		if (verbose) cout << "T5: CutPurse Card Test:" << PASS(tResult) << " Player 2's discardCount reduces by 1\n";
+		if (verbose) cout << "T5: CutPurse Card Test:" << PASS(tResult) << " Player 2's discardCount increases by 1 if copper was present\n";
 
 		// Total Card Test for Player 2
 		tResult = (G.handCount[1] + G.deckCount[1] + G.discardCount[1]) == (G_original.handCount[1] + G_original.deckCount[1] + G_original.discardCount[1]);
