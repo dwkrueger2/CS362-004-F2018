@@ -229,6 +229,10 @@ int * CutPurseCardTest(gameState * beforeTest, gameState * afterTest, bool verbo
 		if (tResult) counter[pass]++; else counter[fail]++;
 		allPass = allPass && tResult;
 		if (verbose) cout << "T2: CutPurse Card Test:" << PASS(tResult) << " Player 1's discardCount stays the same\n";
+		//
+		//memcpy(&G, &G_original, sizeof(gameState));
+		//cardEffect(cutpurse, 0, 0, 0, &G, 0, 0);
+
 
 		// Total Card Test for Player 1
 		tResult = (G.handCount[0] + G.deckCount[0] + G.discardCount[0] + G.playedCardCount) 
@@ -236,6 +240,9 @@ int * CutPurseCardTest(gameState * beforeTest, gameState * afterTest, bool verbo
 		if (tResult) counter[pass]++; else counter[fail]++;
 		allPass = allPass && tResult;
 		if (verbose) cout << "T3: CutPurse Card Test:" << PASS(tResult) << " Player 1's total card count remains the same.\n";
+		if (!allPass)
+			string s7 = "breakpoint here";
+		
 	}
 	// Player 2 .. hand reduces by 1 / Discard + 1
 	{// Player 2

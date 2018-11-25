@@ -6,6 +6,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define USE_CORRECTED_VERSION 1  // surrounds areas where bugs are corrected
+
 int compare(const void* a, const void* b) {
 	if (*(int*)a > *(int*)b)
 		return 1;
@@ -1151,7 +1153,19 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 					{
 						if (state->hand[i][j] == copper)
 						{
-							discardCard(j, i, state, 0);
+						#ifdef USE_CORRECTED_VERSION   // surrounds areas where bugs are corrected
+							// move player i's j'th card to their discard stack
+							state->discard[i][state->discardCount[i]] = state->hand[i][j];
+							state->discardCount[i]++;
+							if (j == (state->handCount[i] - 1)) // last card in deck
+								state->handCount[i]--; //
+							else {
+								state->hand[i][j] = state->hand[i][state->handCount[i] - 1]; // move last card in hand to position j
+								state->handCount[i]--;
+							}
+						#else
+							discardCard(j, i, state, 0);  // problem is this moves card to played stack for current player
+						#endif
 							break;
 						}
 						if (j == state->handCount[i])
@@ -1168,10 +1182,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 				}
 
 			}
-
+		
 			//discard played card from hand
 			discardCard(handPos, currentPlayer, state, 0);
-
 			return 0;
 
 
@@ -1269,6 +1282,7 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
 		//add card to played pile
 		state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos];
 		state->playedCardCount++;
+
 	}
 
 	//set played card to -1
