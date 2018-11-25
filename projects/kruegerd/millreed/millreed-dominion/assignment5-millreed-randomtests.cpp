@@ -79,7 +79,8 @@ int gameStateRandomizer(gameState * G, int challengCard);
 #elif defined(RUN_CUTPURSE)
 #define PRINTHEADER printHeader("Running Random Card Test 2 - Cutpurse");	
 #define RANDOMIZER gameStateRandomizer(&G,cutpurse);
-#define CARD_EFFECT cardEffectCutPurse(&G, cardPosition);
+//#define CARD_EFFECT cardEffectCutPurse(&G, cardPosition);
+#define CARD_EFFECT   cardEffect(cutpurse, 0, 0, 0, &G, 0, 0); // original signuture for call to cut purse
 #define RUNNINGTEST CutPurseCardTest(&G_original, &G, verbose);
 #elif defined(RUN_ADVENTURE)
 #define PRINTHEADER printHeader("Running Random Card Test 3 - Adventurer");  if (VERBOSE) cout <<  "\tCoin Before" << "\tCoin After" << "\tValue Increase" << "\t  Card Count Same" << "\t\tHandCount+2" << "\tBuys/Actions Same" << endl;

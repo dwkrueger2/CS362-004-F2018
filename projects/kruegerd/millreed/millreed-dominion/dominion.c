@@ -829,7 +829,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	//uses switch to select card and perform actions
 	switch (card)
 	{
-
+		
 		case adventurer:
 
 			return adventurer_card(state, currentPlayer, &drawntreasure, &z, &nextPlayer);
