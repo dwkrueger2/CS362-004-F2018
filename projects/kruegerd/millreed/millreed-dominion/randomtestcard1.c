@@ -26,9 +26,9 @@
 #ifdef _WIN32
 #define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
-#include "../../../dominion/dominion.h"
-#include "../../../dominion/dominion_helpers.h"
-#include "../../../dominion/rngs.h"
+#include "dominion.h"
+#include "dominion_helpers.h"
+#include "rngs.h"
 //extern "C++"
 //{
 

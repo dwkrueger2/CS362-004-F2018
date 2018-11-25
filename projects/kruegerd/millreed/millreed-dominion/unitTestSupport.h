@@ -22,7 +22,7 @@ using namespace std;
 #ifdef _WIN32
 #define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
-#include "../../../dominion/dominion.h"
+#include "dominion.h"
 #elif __linux__
 
 #include "dominion.h" 
