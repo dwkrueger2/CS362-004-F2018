@@ -53,7 +53,7 @@ int functionTest5_c() {
 #else
 int main() {
 #endif
-	printHeader("Running Unit Test for Shuffle Function from Assignment 3");
+	printHeader("Running Unit Test 5 for Shuffle Function from Assignment 3");
 	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };
 	struct gameState G;
 	// TODO:  initializeGame can return -1 if it doesn't initialize.  No provision for this is accounted for - danKrueger

@@ -49,7 +49,7 @@ int main() {
 
 	struct gameState G_original;
 	memcpy(&G_original, &G, sizeof(gameState));
-	printHeader("Running Unit Test for Smithy Card from Assignment 3");
+	printHeader("Running Unit Test 2 for Smithy Card from Assignment 3");
 	cardEffect(smithy, -1, -1, -1, &G, G.handCount[player_i] - 1, 0); // the cardEffect signature is very odd to me... How coins are tracked is odd.
 
 

@@ -36,7 +36,7 @@ int cardtest4_c() {
 #else
 int main() {
 #endif
-	printHeader("Running Unit Test for Gardens Card from Assignment 3");
+	printHeader("Running Unit Test 4 for Gardens Card from Assignment 3");
 	gameState G;
 	// initial state + 1 of each of the 5 supply cards in the deck
 	int k[NUM_KINGDOM_CARDS] = { smithy, adventurer, gardens, village, cutpurse };

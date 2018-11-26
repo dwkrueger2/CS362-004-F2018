@@ -48,7 +48,7 @@
 #include "rngs.h"
 #endif
 
-#define USE_AS_FUNCTION 1 // 0 true 1 false
+#define USE_AS_FUNCTION 0 // 0 true 1 false
 #if USE_AS_FUNCTION
 int functionTest6_c() {
 #else
@@ -61,7 +61,7 @@ int main() {
 		int seed = 2;
 		int numPlayers = 2;
 		initializeGame(numPlayers, k, seed, &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
-		printHeader("Running Unit Test for buyCard Function from Assignment 3");
+		printHeader("Running Unit Test 6 for buyCard Function from Assignment 3");
 		bool allPass = true;
 
 		int player_i = whoseTurn(&G);

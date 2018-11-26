@@ -50,7 +50,7 @@
 #include "rngs.h"
 #endif
 
-#define USE_AS_FUNCTION 1 // 0 true 1 false
+#define USE_AS_FUNCTION 0 // 0 true 1 false
 #if USE_AS_FUNCTION
 int functionTest7_c() {
 #else
@@ -63,7 +63,7 @@ int main() {
 	int seed = 2;
 	int numPlayers = 4;
 	initializeGame(numPlayers, k, seed, &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
-	printHeader("Running Unit Test for endTurn Function from Assignment 3");
+	printHeader("Running Unit Test 7 for endTurn Function from Assignment 3");
 	bool allPass = true;
 
 	int player_i = whoseTurn(&G);

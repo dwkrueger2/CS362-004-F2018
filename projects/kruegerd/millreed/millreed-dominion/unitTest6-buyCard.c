@@ -61,7 +61,7 @@ int main() {
 		int seed = 2;
 		int numPlayers = 2;
 		initializeGame(numPlayers, k, seed, &G); // call signature -> (numplayers, cardDeck, random seed, gameState Object)
-		printHeader("Running Unit Test for buyCard Function from Assignment 3");
+		printHeader("Running Unit Test 6 for buyCard Function from Assignment 3");
 		bool allPass = true;
 
 		int player_i = whoseTurn(&G);

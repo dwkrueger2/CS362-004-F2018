@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <cstring>
 
-#define USE_CORRECTED_VERSION 0  // 1 = true 0= false surrounds areas where bugs are corrected
+#define USE_CORRECTED_VERSION 1  // 1 = true 0= false surrounds areas where bugs are corrected
 
 int compare(const void* a, const void* b) {
 	if (*(int*)a > *(int*)b)

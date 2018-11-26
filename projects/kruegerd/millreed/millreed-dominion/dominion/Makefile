@@ -68,14 +68,14 @@ unitTest4: dominion.c unitTest4.c unitHelper
 	cat dominion.c.gcov >> unittestresult.out
 
 unitTest5: dominion.c unitTest5.c unitHelper
-	gcc -x c++ -o unitTest5 -g unitTest1.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+	gcc -x c++ -o unitTest5 -g unitTest5.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 	./unitTest5 &>> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
 #randomtestcard3 is the Adventurer cardtest code
 unitTest6: dominion.c unitTest6.c unitHelper
-	gcc -x c++ -o unitTest6 -g unitTest2.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+	gcc -x c++ -o unitTest6 -g unitTest6.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 	./unitTest6 &>> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
@@ -83,14 +83,14 @@ unitTest6: dominion.c unitTest6.c unitHelper
 
 #randomtestcard3 is the Adventurer cardtest code
 unitTest7: dominion.c unitTest7.c unitHelper
-	gcc -x c++ -o unitTest7 -g unitTest3.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+	gcc -x c++ -o unitTest7 -g unitTest7.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 	./unitTest7 &>> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
 #randomtestcard3 is the Adventurer cardtest code
 unitTest8: dominion.c unitTest8.c unitHelper
-	gcc -x c++ -o unitTest8 -g unitTest4.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+	gcc -x c++ -o unitTest8 -g unitTest8.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 	./unitTest8 &>> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
