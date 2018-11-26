@@ -86,10 +86,15 @@
     <ClCompile Include="unitTest8-isGameOver.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="randomtestcard3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="copyUnitTests.sh" />
+    <None Include="READM.md" />
   </ItemGroup>
 </Project>

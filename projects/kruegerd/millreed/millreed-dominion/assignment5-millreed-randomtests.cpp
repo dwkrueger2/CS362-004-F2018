@@ -67,9 +67,9 @@ int gameStateRandomizer(gameState * G, int challengCard);
 #define NUM_TESTS_TO_RUN 5000
 #define VERBOSE true
 #define EXAMPLE_TEST_COUNT 15
-//#define RUN_SMITHY
+#define RUN_SMITHY
 //#define RUN_CUTPURSE
-#define RUN_ADVENTURE
+//#define RUN_ADVENTURE
 
 #if defined (RUN_SMITHY)
 #define PRINTHEADER printHeader("Running Random Card Test 1 - Smithy");
@@ -93,7 +93,7 @@ int gameStateRandomizer(gameState * G, int challengCard);
 
 
 #define PRINT_TAIL_HEADER printHeader("CodeCoverage Information to Follow");
-#define USE_AS_FUNCTION 1 // 0 true 1 false
+#define USE_AS_FUNCTION 0 // 0 true 1 false
 #if USE_AS_FUNCTION
 int mainRandomTests() {
 #else

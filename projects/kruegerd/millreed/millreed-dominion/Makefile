@@ -13,8 +13,8 @@ dominion.o: dominion.h dominion.c rngs.o
 	gcc -x c++ -c dominion.c -g  $(CFLAGS)
 
 #unitTest1 is the cutpurse test  It is not included in the full test suite
-unitTest1: dominion.c unitTest1-cutpurse.c unitHelper
-	gcc -x c++ -o unitTest1 -g unitTest1-cutpurse.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+#unitTest1: dominion.c unitTest1-cutpurse.c unitHelper
+#	gcc -x c++ -o unitTest1 -g unitTest1-cutpurse.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 
 #randomtestcard1 is the cutpurse code
 cardTest1: dominion.c randomtestcard1.c unitHelper
@@ -30,34 +30,67 @@ cardTest2: dominion.c randomtestcard2.c unitHelper
 cardTest3: dominion.c randomtestcard3.c unitHelper
 	gcc -x c++ -o cardTest3 -g randomtestcard3.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 
+
+#randomtestcard3 is the Adventurer cardtest code
+unitTest1: dominion.c unitTest1.c unitHelper
+	gcc -x c++ -o unitTest1 -g unitTest1.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+#randomtestcard3 is the Adventurer cardtest code
+unitTest2: dominion.c unitTest2.c unitHelper
+	gcc -x c++ -o unitTest2 -g unitTest2.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+#randomtestcard3 is the Adventurer cardtest code
+unitTest3: dominion.c unitTest3.c unitHelper
+	gcc -x c++ -o unitTest3 -g unitTest3.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+#randomtestcard3 is the Adventurer cardtest code
+unitTest4: dominion.c unitTest4.c unitHelper
+	gcc -x c++ -o unitTest4 -g unitTest4.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+unitTest5: dominion.c unitTest5.c unitHelper
+	gcc -x c++ -o unitTest5 -g unitTest1.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+#randomtestcard3 is the Adventurer cardtest code
+unitTest6: dominion.c unitTest6.c unitHelper
+	gcc -x c++ -o unitTest6 -g unitTest2.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+#randomtestcard3 is the Adventurer cardtest code
+unitTest7: dominion.c unitTest7.c unitHelper
+	gcc -x c++ -o unitTest7 -g unitTest3.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+#randomtestcard3 is the Adventurer cardtest code
+unitTest8: dominion.c unitTest8.c unitHelper
+	gcc -x c++ -o unitTest8 -g unitTest4.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+
 adventureTest: dominion.c randomtestadventurer.c unitHelper
 	#gcc -x c++ -lstdc++ -o adventureTest -c -g randomtestadventurer.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 	gcc -x c++ -o adventureTest -g randomtestadventurer.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 
-testSuite: cardTest1 cardTest2 adventureTest
+testSuite: cardTest1 cardTest2 cardTest3 unitTest1 unitTest2 unitTest3 unitTest4 unitTest5 unitTest6 unitTest7 unitTest8
 	./cardTest1
 	./cardTest2
-	./adventureTest
+	./cardTest3
+	./unitTest1
+	./unitTest2
+	./unitTest3
+	./unitTest4
+	./unitTest5
+	./unitTest6
+	./unitTest7
+	./unitTest8
 
-testAll: cardTest1 cardTest2 adventureTest
+
+testAll: cardTest1 cardTest2 cardTest3 unitTest1 unitTest2 unitTest3 unitTest4 unitTest5 unitTest6 unitTest7 unitTest8
 	./cardTest1 &> unittestresult.out
 	./cardTest2 &>> unittestresult.out
-	./adventureTest &>> unittestresult.out
+	./cardTest3 &>> unittestresult.out
+	./unitTest1 &>> unittestresult.out
+	./unitTest2 &>> unittestresult.out
+	./unitTest3 &>> unittestresult.out
+	./unitTest4 &>> unittestresult.out
+	./unitTest5 &>> unittestresult.out
+	./unitTest6 &>> unittestresult.out
+	./unitTest7 &>> unittestresult.out
+	./unitTest8 &>> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
-	
+	make clean
 
 
-#runtests: testDrawCard 
-#	./testDrawCard &> unittestresult.out
-#	gcov dominion.c >> unittestresult.out
-#	cat dominion.c.gcov >> unittestresult.out
 
-
-#player: player.c interface.o
-#	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
-
-#all: playdom player 
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe adventureTest *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe unitTest[1-4] cardTest[1-4] testSuite
+	rm -f *.o playdom.exe playdom player player.exe adventureTest *.gcov *.gcda *.gcno *.so unitTest[1-8] cardTest[1-4] testSuite
