@@ -177,6 +177,13 @@
     </ClCompile>
     <ClCompile Include="rngs.c" />
     <ClCompile Include="unitTest1-cutpurse.c" />
+    <ClCompile Include="unitTest2-Smithy.c" />
+    <ClCompile Include="unitTest3-Adventure.c" />
+    <ClCompile Include="unitTest4-garden.c" />
+    <ClCompile Include="unitTest5-shuffle.c" />
+    <ClCompile Include="unitTest6-buyCard.c" />
+    <ClCompile Include="unitTest7-endTurn.c" />
+    <ClCompile Include="unitTest8-isGameOver.c" />
     <ClCompile Include="unitTestSupport.c" />
   </ItemGroup>
   <ItemGroup>
