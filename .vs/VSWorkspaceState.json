@@ -2,8 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\projects",
-    "\\projects\\kruegerd"
+    "\\projects\\kruegerd",
+    "\\projects\\kruegerd\\millreed",
+    "\\projects\\kruegerd\\millreed\\millreed-dominion",
+    "\\projects\\kruegerd\\millreed\\millreed-dominion\\Results"
   ],
-  "SelectedNode": "\\projects\\kruegerd\\millreed",
+  "SelectedNode": "\\projects\\kruegerd\\millreed\\millreed-dominion\\unitTest1-cutpurse.c",
   "PreviewInSolutionExplorer": false
 }

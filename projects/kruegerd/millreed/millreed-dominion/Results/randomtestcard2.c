@@ -1,4 +1,4 @@
-﻿//#######################################################################
+//#######################################################################
 //#			Author:		Daniel Krueger
 //#			Course:		362 Software Engineering II
 //#			Project:	Dominion Card Game Testing - Assignment 5
@@ -68,8 +68,8 @@ int gameStateRandomizer(gameState * G, int challengCard);
 #define VERBOSE true
 #define EXAMPLE_TEST_COUNT 15
 //#define RUN_SMITHY
-//#define RUN_CUTPURSE
-#define RUN_ADVENTURE
+#define RUN_CUTPURSE
+//#define RUN_ADVENTURE
 
 #if defined (RUN_SMITHY)
 #define PRINTHEADER printHeader("Running Random Card Test 1 - Smithy");

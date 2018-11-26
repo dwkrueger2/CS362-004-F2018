@@ -93,7 +93,7 @@ int gameStateRandomizer(gameState * G, int challengCard);
 
 
 #define PRINT_TAIL_HEADER printHeader("CodeCoverage Information to Follow");
-#define USE_AS_FUNCTION 1 // 0 true 1 false
+#define USE_AS_FUNCTION 0 // 0 true 1 false
 #if USE_AS_FUNCTION
 int mainRandomTests() {
 #else

@@ -67,8 +67,8 @@ int gameStateRandomizer(gameState * G, int challengCard);
 #define NUM_TESTS_TO_RUN 5000
 #define VERBOSE true
 #define EXAMPLE_TEST_COUNT 15
-//#define RUN_SMITHY
-#define RUN_CUTPURSE
+#define RUN_SMITHY
+//#define RUN_CUTPURSE
 //#define RUN_ADVENTURE
 
 #if defined (RUN_SMITHY)

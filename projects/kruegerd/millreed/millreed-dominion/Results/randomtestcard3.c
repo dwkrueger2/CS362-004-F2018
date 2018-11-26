@@ -1,4 +1,4 @@
-﻿//#######################################################################
+//#######################################################################
 //#			Author:		Daniel Krueger
 //#			Course:		362 Software Engineering II
 //#			Project:	Dominion Card Game Testing - Assignment 5

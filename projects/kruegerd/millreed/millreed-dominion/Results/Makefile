@@ -1,4 +1,4 @@
-﻿CFLAGS= -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+CFLAGS= -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 # Version 202
 # for setting bash (i.e. cut an paste)  $CFLAGS=" -Wall -fpic -coverage -lm -std=c++11 -lstdc++"
 # you have to remove the '(' ')' from command line when running one at a time
