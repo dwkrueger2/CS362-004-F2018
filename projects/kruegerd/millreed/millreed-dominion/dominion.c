@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <cstring>
 
 #define USE_CORRECTED_VERSION 1  // 1 = true 0= false surrounds areas where bugs are corrected
 
@@ -650,11 +651,12 @@ int getCost(int cardNumber)
 	return -1;
 }
 
+
 int adventurer_card(struct gameState *state, int currentPlayer, int *drawntreasure, int *z, int *nextPlayer)
 {
+
 	int temphand[MAX_HAND];
 	int cardDrawn;
-
 	while (*drawntreasure < 2) {
 		if (state->deckCount[currentPlayer] < 1) {//if the deck is empty we need to shuffle discard and add to deck
 			shuffle(currentPlayer, state);
@@ -669,10 +671,17 @@ int adventurer_card(struct gameState *state, int currentPlayer, int *drawntreasu
 			*z += 1;
 		}
 	}
+#if USE_CORRECTED_VERSION
+	while ((*z) > 0) {
+		state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[*z - 1]; // discard all cards in play that have been drawn
+		*z = *z - 1;
+	}
+#else
 	while (*z - 1 >= 0) {
 		state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[*z - 1]; // discard all cards in play that have been drawn
 		z = z - 1;
-	}
+}
+#endif
 	return 0;
 }
 

@@ -66,10 +66,10 @@ int gameStateRandomizer(gameState * G, int challengCard);
 
 #define NUM_TESTS_TO_RUN 5000
 #define VERBOSE true
-#define EXAMPLE_TEST_COUNT 5
-#define RUN_SMITHY
+#define EXAMPLE_TEST_COUNT 15
+//#define RUN_SMITHY
 //#define RUN_CUTPURSE
-//#define RUN_ADVENTURE
+#define RUN_ADVENTURE
 
 #if defined (RUN_SMITHY)
 #define PRINTHEADER printHeader("Running Random Card Test 1 - Smithy");
@@ -86,9 +86,12 @@ int gameStateRandomizer(gameState * G, int challengCard);
 #elif defined(RUN_ADVENTURE)
 #define PRINTHEADER printHeader("Running Random Card Test 3 - Adventurer");  if (VERBOSE) cout <<  "\tCoin Before" << "\tCoin After" << "\tValue Increase" << "\t  Card Count Same" << "\t\tHandCount+2" << "\tBuys/Actions Same" << endl;
 #define RANDOMIZER gameStateRandomizer(&G,adventurer);
-#define CARD_EFFECT cardEffectAdventurer(&G);
+//#define CARD_EFFECT cardEffectAdventurer(&G); // my signature
+#define CARD_EFFECT cardEffect(adventurer, 0, 0, 0, &G, cardPosition, 0); // original signature for call to cardEffect
 #define RUNNINGTEST AdventurerCardTest(&G_original, &G, verbose);
 #endif
+
+
 #define PRINT_TAIL_HEADER printHeader("CodeCoverage Information to Follow");
 #define USE_AS_FUNCTION 0 // 0 true 1 false
 #if USE_AS_FUNCTION
@@ -111,8 +114,8 @@ int main() {
 	gameState G;
 	struct gameState G_original;
 	//int cardPosition = 0; // the card poisiton the challeng card will be played from 
-	PRINTHEADER
 		cout << "Running " << NUM_TESTS_TO_RUN << " tests.  Showing only " << EXAMPLE_TEST_COUNT << " of " << NUM_TESTS_TO_RUN << endl;
+	PRINTHEADER
 	for (int i = 0; i < NUM_TESTS_TO_RUN; i++)
 	{
 
@@ -121,11 +124,19 @@ int main() {
 
 		CardTestInitializeGame(&G); // initial state + 1 of each of the 5 supply cards in the deck
 		cardPosition = RANDOMIZER; // puts challenge card in cardPosition and makes random deck
+		if ((G.deckCount[0] + G.discardCount[0]) < 10)
+			cout << "break here";
 		// testing the rand generator		//cout <<"smithy pos: " << cardPosition<<":" <<  getHandString(0, &G)<< endl;
 		//G.deckCount[G.whoseTurn] = 1;
 		memcpy(&G_original, &G, sizeof(gameState));
-		smithy_card(G.whoseTurn, &G, cardPosition);
-		//CARD_EFFECT
+	//#ifdef RUN_ADVENTURE // modifications to fit the Reed Miller Code Signature
+	//	int drawntreasure = 0; 
+	//	int z = 0; 
+	//	z = drawntreasure; drawntreasure = z; // just getting rid of unused variable warnings in c++11
+	//	// nextplayer set to 1 and is not referenced in the function
+	//#endif
+		//smithy_card(G.whoseTurn, &G, cardPosition);
+		CARD_EFFECT
 
 			//results = SmithyCardTest(&G_original, &G, true);
 			results = RUNNINGTEST;
@@ -345,7 +356,7 @@ int *  AdventurerCardTest(gameState * beforeTest, gameState * afterTest, bool ve
 	cardCountBefore = G.deckCount[player_i] + G.discardCount[player_i] + G.playedCardCount + G.handCount[player_i];
 	cardCountAfter = G_original.deckCount[player_i] + G_original.discardCount[player_i] + G_original.playedCardCount + G_original.handCount[player_i];
 	bool tResult_TotalCardCount = (cardCountBefore == cardCountAfter);
-	bool tResult_HandCount_plus2 = (G.handCount[player_i] == G_original.handCount[player_i]);
+	bool tResult_HandCount_plus2 = (G.handCount[player_i] == G_original.handCount[player_i] +2);
 	bool tResult_Buys_Actions_same = (G.numBuys == G_original.numBuys) && (G.numActions == G_original.numActions);
 	// Check coint count
 	int coinCountBefore = 0;
@@ -395,7 +406,7 @@ int *  AdventurerCardTest(gameState * beforeTest, gameState * afterTest, bool ve
 		if (verbose) cout << "\t\t" << coinCountBefore << "\t" << coinCountAfter << "\t\t";
 		if (verbose) cout << PASS(tResult_valueIncrease);
 		if (verbose) cout << "\t\t\t";
-		if (verbose) cout << PASS(tResult_TotalCardCount);
+		if (verbose) cout << PASS(tResult_TotalCardCount) << "("<<cardCountBefore<<","<<cardCountAfter<<")";
 		if (verbose) cout << "\t\t\t";
 		if (verbose) cout << PASS(tResult_HandCount_plus2);
 		if (verbose) cout << "\t\t";
@@ -423,8 +434,8 @@ int gameStateRandomizer(gameState * G, int challengCard)
 	deckCount = rand() % 25 + 1;
 	discardCount = rand() % 25 + 1;
 	playedCount = rand() % 25 + 1;
-	//if ((deckCount + discardCount) < 10)
-	//	discardCount = discardCount + 10;// game relies on an initial state of having enough cards to fullfill initial draw requests.
+	if ((deckCount + discardCount) < 10)
+			discardCount = discardCount + 10;// game relies on an initial state of having enough cards to fullfill initial draw requests.
 	challengeCardPosition = rand() % handCount; // 
 	numberActions = rand() % 6; // up to 5 actions
 	coins = rand() % 11; // up to 10 coins
@@ -447,11 +458,62 @@ int gameStateRandomizer(gameState * G, int challengCard)
 			G->playedCards[j] = card;
 
 		}
+
 		G->handCount[player_i] = handCount;
 		G->deckCount[player_i] = deckCount;
 		G->discardCount[player_i] = discardCount;
 		G->playedCardCount = playedCount;
 		G->hand[player_i][challengeCardPosition] = challengCard;
+
+		// some cards require a certain minimum number of treasure cards
+		// The original game starts with 7 coppers and 3 estates
+		// So we will seed the 7 copper and 3 estates into the already distributed  cards
+		int totalCards = deckCount + discardCount;// +playedCount + handCount;
+		if (totalCards < 10)
+			cout << "break here";
+		int index = 0;
+		for (int m = 0; m < 10; m++)
+		{
+			int slider = totalCards / 10; // the average spacing
+			index += rand() % slider +1;
+			int newIndex = 0;
+			int * selectedDeck;
+			if (index < deckCount)
+			{
+				selectedDeck = G->deck[player_i];
+				newIndex = index;
+			}
+			else if (index < (deckCount + discardCount)) // doing the deck and discard first ensures copper in these decks
+			{
+				selectedDeck = G->discard[player_i];
+				newIndex = index - deckCount;
+			}
+			else if (index < (deckCount + discardCount + playedCount))
+			{
+				selectedDeck = G->playedCards;
+				newIndex = index - deckCount - discardCount;
+			}
+			else
+			{
+				selectedDeck = G->hand[player_i];
+				newIndex = index - deckCount - discardCount - playedCount;
+			}
+			if (m < 7)
+				selectedDeck[newIndex] = copper;
+			else 
+				selectedDeck[newIndex] = estate;
+
+		}
+	// make sure there are 7 coppers in the discard or deck cards
+	int coinCardCount = 0;
+	for (int i = 0; i < G->deckCount[player_i]; i++)
+		if (G->deck[player_i][i] >= copper && G->deck[player_i][i] <= gold)
+			coinCardCount++;
+	for (int i = 0; i < G->discardCount[player_i]; i++)
+		if (G->discard[player_i][i] >= copper && G->discard[player_i][i] <= gold)
+			coinCardCount++;
+	if (coinCardCount < 7)
+		cout << "break here-improper deck";
 	}
 	G->numActions = numberActions;
 	G->coins = coins;

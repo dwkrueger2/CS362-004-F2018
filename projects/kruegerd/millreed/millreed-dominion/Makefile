@@ -26,6 +26,10 @@ cardTest1: dominion.c randomtestcard1.c unitHelper
 cardTest2: dominion.c randomtestcard2.c unitHelper
 	gcc -x c++ -o cardTest2 -g randomtestcard2.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 
+#randomtestcard3 is the Adventurer cardtest code
+cardTest3: dominion.c randomtestcard3.c unitHelper
+	gcc -x c++ -o cardTest3 -g randomtestcard3.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
+
 adventureTest: dominion.c randomtestadventurer.c unitHelper
 	#gcc -x c++ -lstdc++ -o adventureTest -c -g randomtestadventurer.c dominion.c rngs.c unitTestSupport.c $(CFLAGS)
 	gcc -x c++ -o adventureTest -g randomtestadventurer.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++

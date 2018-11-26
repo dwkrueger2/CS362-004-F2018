@@ -62,5 +62,13 @@
     <ClCompile Include="randomtestcard2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="unitTest1-cutpurse.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
