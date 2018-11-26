@@ -32,9 +32,9 @@
 #include "rngs.h"
 #endif
 using namespace std;
-#define USE_AS_FUNCTION 1 // 0 true 1 false
+#define USE_AS_FUNCTION 1// 0 true 1 false
 #if USE_AS_FUNCTION
-int cardtest3_c() {
+int cardtest1_c() {
 #else
 	int main (){
 #endif
@@ -82,6 +82,7 @@ int cardtest3_c() {
 	/// Finish Setup
 	struct gameState G_original;
 	memcpy(&G_original, &G, sizeof(gameState));
+	printHeader("Running Unit Test for CutPurse Card from Assignment 3");
 	cardEffect(cutpurse, 0, 0, 0, &G, 0, 0); // original signuture for call to cut purse
 //	cardEffectCutPurse(&G, 2);
 	{// Player 1
