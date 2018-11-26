@@ -17,6 +17,7 @@
 #define NUM_KINGDOM_CARDS 5  // the number of cards the players can draw from and put in their hands. (AKA Supply Pile Kindom Cards)
 
 #define DEBUG 0
+ 
 
 /* http://dominion.diehrstraits.com has card texts */
 /* http://dominion.isotropic.org has other stuff */
@@ -143,10 +144,21 @@ reflect the effect on the game.
 
 cardEffect is the original function and left as the default for other cards that are no included in the 5 functions explicetly called. 
 */
+//Dan Krueger's Function Prototypes
 int cardEffectSmithy(struct gameState *state, int handPos);
 int cardEffectAdventurer(struct gameState *state);
 int cardEffectGardens(struct gameState *state);
 int cardEffectVillage(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
 int cardEffectCutPurse(struct gameState *state, int handPos);
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+
+// Reed Miller's function Prototypes
+int smithy_card(int currentPlayer, struct gameState *state, int handPos);
+int adventurer_card(struct gameState *state, int currentPlayer, int *drawntreasure, int *z, int *nextPlayer);
+int council_room_card(int currentPlayer, struct gameState *state, int handPos);
+int mine_card(struct gameState *state, int currentPlayer, int choice1, int choice2, int handPos);
+int minion_card(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2);
+
 #endif
+
+
