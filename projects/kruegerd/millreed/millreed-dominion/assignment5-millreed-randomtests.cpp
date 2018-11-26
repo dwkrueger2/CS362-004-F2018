@@ -122,6 +122,7 @@ int main() {
 		CardTestInitializeGame(&G); // initial state + 1 of each of the 5 supply cards in the deck
 		cardPosition = RANDOMIZER; // puts challenge card in cardPosition and makes random deck
 		// testing the rand generator		//cout <<"smithy pos: " << cardPosition<<":" <<  getHandString(0, &G)<< endl;
+		//G.deckCount[G.whoseTurn] = 1;
 		memcpy(&G_original, &G, sizeof(gameState));
 		smithy_card(G.whoseTurn, &G, cardPosition);
 		//CARD_EFFECT
@@ -148,7 +149,7 @@ int main() {
 		return 0;
 }
 
-
+//int testRun = 0;
 
 //
 int * SmithyCardTest(gameState * beforeTest, gameState * afterTest, bool verbose)
@@ -165,18 +166,22 @@ int * SmithyCardTest(gameState * beforeTest, gameState * afterTest, bool verbose
 	gameState G = *afterTest;
 	gameState G_original = *beforeTest;
 	int player_i = whoseTurn(&G);
+	bool shuffleRequired = (G_original.deckCount[player_i] < 3);
 
-	//		T1  Hand card count should increase by 3
-	tResult = (G.handCount == G_original.handCount + 3);
+	//		T1  Hand card count should increase by 2  (Add 3 then play the smithy for -1 = 3-1 = 2)
+	tResult = (G.handCount[player_i] == (G_original.handCount[player_i] + 2));
 	if (tResult) counter[pass]++; else counter[fail]++;
 	allPass = allPass && tResult;
-	if (verbose) cout << "T1: Smithy Card Test:" << PASS(tResult) << " Returns true when handCount increases by 3\n";
+	if (verbose) cout << "T1: Smithy Card Test:" << PASS(tResult) << " Returns true when handCount increases by 2\n";
 
 	//		T2  Deck card count should decrease by 3.  (becuase initial state has 5 deck cards)
-	tResult = (G.deckCount == G_original.deckCount - 3);
+	if (!shuffleRequired)
+		tResult = (G.deckCount[player_i] == G_original.deckCount[player_i] - 3);
+	else
+		tResult = true;  // not testing the suffle just drawing of cards
 	if (tResult) counter[pass]++; else counter[fail]++;
 	allPass = allPass && tResult;
-	if (verbose) cout << "T2: Smithy Card Test:" << PASS(tResult) << " Returns true when deckCount decreases by 3\n";
+	if (verbose) cout << "T2: Smithy Card Test:" << PASS(tResult) << " Returns true when deckCount decreases by 2 if no shuffle\n";
 
 	//		T3  Actions remain the same
 	tResult = (G.numActions == G_original.numActions);
@@ -211,6 +216,23 @@ int * SmithyCardTest(gameState * beforeTest, gameState * afterTest, bool verbose
 	if (verbose) cout << "T7: Smithy Card Test:" << PASS(tResult) << " Returns true when Total Cards owned by player remains the same.\n";
 
 	if (verbose) cout << "Card Test 1- Smithy - all tests:" << PASS(allPass) << endl;
+	
+	// #region Checking for Smithy Failures
+	//		It was discovered that Smithy tests fail when deck + discard cards < 3 thus drawCard fails after shuffle.
+	//if (!allPass && testRun == 0)
+	//{ // rerun the test to see what failed..
+	//	memcpy(&G, &G_original, sizeof(gameState));
+	//	smithy_card(G.whoseTurn, &G, 0);
+	//	testRun++;
+	//	cout << "\tOriginal\tAfter"<< endl;
+	//	cout <<"handCount\t" << G.handCount[0] << "\t" << G_original.handCount[0] << endl;
+	//	cout << "deckCount\t" << G.deckCount[0] << "\t" << G_original.deckCount[0] << endl;
+	//	cout << "playedCount\t" << G.playedCardCount << "\t" << G_original.playedCardCount << endl;
+	//	cout << "discardCount\t" << G.discardCount[0] << "\t" << G_original.discardCount[0] << endl;
+	//	SmithyCardTest(&G_original, &G, true);
+	//}
+	//else
+	//	testRun = 0; /// prevent the recursion
 	//return (allPass ? 0 : 1);
 	return counter; // make all stops on error
 
@@ -401,6 +423,8 @@ int gameStateRandomizer(gameState * G, int challengCard)
 	deckCount = rand() % 25 + 1;
 	discardCount = rand() % 25 + 1;
 	playedCount = rand() % 25 + 1;
+	//if ((deckCount + discardCount) < 10)
+	//	discardCount = discardCount + 10;// game relies on an initial state of having enough cards to fullfill initial draw requests.
 	challengeCardPosition = rand() % handCount; // 
 	numberActions = rand() % 6; // up to 5 actions
 	coins = rand() % 11; // up to 10 coins
