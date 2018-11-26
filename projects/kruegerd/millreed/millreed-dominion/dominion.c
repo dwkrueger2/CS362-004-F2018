@@ -6,7 +6,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define USE_CORRECTED_VERSION 1  // surrounds areas where bugs are corrected
+#define USE_CORRECTED_VERSION 1  // 1 = true 0= false surrounds areas where bugs are corrected
 
 int compare(const void* a, const void* b) {
 	if (*(int*)a > *(int*)b)
@@ -680,9 +680,13 @@ int smithy_card(int currentPlayer, struct gameState *state, int handPos)
 {
 	int i;
 	//+3 Cards
+	#if USE_CORRECTED_VERSION
+	for (i = 0; i < 3; i++)
+	#else
 	for (i = 1; i < 3; i++)
+	#endif
 	{
-		drawCard(currentPlayer, state);
+		drawCard(currentPlayer, state); // needs checked for draw card failure (i.e. not enough discarded cards and deck cards combined)
 	}
 
 	//discard card from hand

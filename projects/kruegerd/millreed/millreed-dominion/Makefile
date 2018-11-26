@@ -22,7 +22,7 @@ cardTest1: dominion.c randomtestcard1.c unitHelper
 	#gcc -x c++ -o cardTest1 -g randomtestcard1.c dominion.c rngs.c unitTestSupport.c  -lstdc++ $(CFLAGS)
 	gcc -x c++ -o cardTest1 -g randomtestcard1.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 
-#randomtestcard2 is the smithycode
+#randomtestcard2 is the smithy cardtest code
 cardTest2: dominion.c randomtestcard2.c unitHelper
 	gcc -x c++ -o cardTest2 -g randomtestcard2.c dominion.c rngs.c unitTestSupport.c -Wall -fpic -coverage -lm -std=c++11 -lstdc++
 
