@@ -16,3 +16,4 @@
 *.idb
 *.pdb
 /projects/kruegerd/kruegerd-Dominion/kruegerd-dominion-windows-console/Debug
+**/.vs
